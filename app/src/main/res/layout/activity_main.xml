@@ -22,5 +22,11 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/round_corners"
+        app:itemRippleColor="@color/rippleBottomMenuColor"
+        app:itemIconTint="@color/item_color"
+        app:itemTextColor="@color/item_color"
+        app:menu="@menu/bottom_menu"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
