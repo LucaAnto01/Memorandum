@@ -11,6 +11,8 @@
     <!--Personal colors-->
     <color name="primaryColor">#03C16F</color>
     <color name="primaryColorVariant">#03A55F</color>
+    <color name="primaryColorVariant_1">#03A50E</color>
+    <color name="primaryColorVariant_2">#03D87C</color>
     <color name="primaryColor_night">#027442</color>
     <color name="primaryColorVariant_night">#026C74</color>
     <color name="rippleBottomMenuColor">#F7F7F7</color>
