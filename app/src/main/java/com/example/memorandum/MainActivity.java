@@ -22,15 +22,12 @@ public class MainActivity extends AppCompatActivity
         {
             super.onCreate(savedInstanceState);
 
-            /*requestWindowFeature(Window.FEATURE_NO_TITLE);
-            this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            getSupportActionBar().hide();*/
-
             binding = ActivityMainBinding.inflate(getLayoutInflater());
             setContentView(binding.getRoot());
 
             ReplaceFragment(new MemoFragment()); //Default selected item
-            ShowException.ShowExceptionMessage("MainActivity", "Ciao è un test", this);
+            binding.bottomNavigationView.setSelectedItemId(R.id.memo);
+
             /**
              * Bottom navigation view item click listener
              */
@@ -63,9 +60,17 @@ public class MainActivity extends AppCompatActivity
      */
     private void ReplaceFragment(Fragment fragment)
     {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.mainFrame, fragment); //Replace the fragment
-        fragmentTransaction.commit();
+        try
+        {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.mainFrame, fragment); //Replace the fragment
+            fragmentTransaction.commit();
+        }
+
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("MainActivity", e.getMessage().toString(), this);
+        }
     }
 }
