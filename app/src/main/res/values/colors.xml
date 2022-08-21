@@ -10,6 +10,9 @@
 
     <!--Personal colors-->
     <color name="primaryColor">#03C16F</color>
+    <color name="primaryColorVariant">#03A55F</color>
+    <color name="primaryColor_night">#027442</color>
+    <color name="primaryColorVariant_night">#026C74</color>
     <color name="rippleBottomMenuColor">#F7F7F7</color>
     <color name="notSelectedItemColor">#272727</color>
 
