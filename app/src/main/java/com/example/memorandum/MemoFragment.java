@@ -1,5 +1,6 @@
 package com.example.memorandum;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,57 +9,50 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MemoFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class MemoFragment extends Fragment {
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class MemoFragment extends Fragment implements View.OnClickListener
+{
+    private FloatingActionButton fbAddMemo;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
 
-    public MemoFragment() {
-        // Required empty public constructor
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View view = inflater.inflate(R.layout.fragment_memo, container, false);
+        fbAddMemo = (FloatingActionButton) view.findViewById(R.id.fbAddMemo);
+        fbAddMemo.setOnClickListener(this);
+
+        return view;
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MemoFragment.
+     * Listener method click fbAddMemo
+     * Start new memo creation procedure
+     * @param v
      */
-    // TODO: Rename and change types and number of parameters
-    public static MemoFragment newInstance(String param1, String param2) {
-        MemoFragment fragment = new MemoFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public void onClick(View v)
+    {
+
+        startActivity(new Intent(getActivity(), AddMemoActivity.class));
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    /*Getters & Setters*/
+    public FloatingActionButton getFbAddMemo()
+    {
+        return fbAddMemo;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_memo, container, false);
+    public void setFbAddMemo(FloatingActionButton fbAddMemo)
+    {
+        this.fbAddMemo = fbAddMemo;
     }
 }
