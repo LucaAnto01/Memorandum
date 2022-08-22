@@ -17,6 +17,7 @@
     <color name="primaryColorVariant_night">#026C74</color>
     <color name="rippleBottomMenuColor">#F7F7F7</color>
     <color name="notSelectedItemColor">#272727</color>
-    <color name="memoItemBackground">#FAFAFA</color>
+    <color name="memoItemBackground">#EDEDED</color>
+    <color name="inputBackgroundColor">#E0E0E0</color>
 
 </resources>
