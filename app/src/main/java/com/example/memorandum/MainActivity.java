@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -28,23 +29,8 @@ public class MainActivity extends AppCompatActivity
             ReplaceFragment(new MemoFragment()); //Default selected item
             binding.bottomNavigationView.setSelectedItemId(R.id.memo);
 
-            /**
-             * Bottom navigation view item click listener
-             */
-            binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-
-                switch (item.getItemId())
-                {
-                    case R.id.all_memo: ReplaceFragment(new AllMemo_Fragment());
-                        break;
-                    case R.id.memo: ReplaceFragment(new MemoFragment());
-                        break;
-                    case R.id.map: ReplaceFragment(new MapFragment());
-                        break;
-                }
-
-                return  true;
-            });
+            //Setting bottomNavigationView listener
+            binding.bottomNavigationView.setOnItemSelectedListener(this::NavigationItemClick);
         }
 
         catch (Exception e)
@@ -52,6 +38,36 @@ public class MainActivity extends AppCompatActivity
             ShowException.ShowExceptionMessage("MainActivity", e.getMessage().toString(), this);
         }
 
+    }
+
+    /**
+     * Bottom navigation view item click listener
+     * @param item
+     * @return
+     */
+    public boolean NavigationItemClick(MenuItem item)
+    {
+        try
+        {
+            switch (item.getItemId())
+            {
+                case R.id.all_memo: ReplaceFragment(new AllMemo_Fragment());
+                    break;
+                case R.id.memo: ReplaceFragment(new MemoFragment());
+                    break;
+                case R.id.map: ReplaceFragment(new MapFragment());
+                    break;
+            }
+
+            return true;
+        }
+
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("MainActivity", e.getMessage().toString(), this);
+        }
+
+        return false;
     }
 
     /**
