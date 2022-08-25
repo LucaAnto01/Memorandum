@@ -1,4 +1,4 @@
-package com.example.memorandum;
+package com.lapp.memorandum;
 
 /*Class containing memo position data*/
 public class Location

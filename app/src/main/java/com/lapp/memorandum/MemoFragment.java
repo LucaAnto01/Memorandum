@@ -1,4 +1,4 @@
-package com.example.memorandum;
+package com.lapp.memorandum;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,8 +19,6 @@ public class MemoFragment extends Fragment implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -41,7 +39,6 @@ public class MemoFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v)
     {
-
         startActivity(new Intent(getActivity(), AddMemoActivity.class));
     }
 

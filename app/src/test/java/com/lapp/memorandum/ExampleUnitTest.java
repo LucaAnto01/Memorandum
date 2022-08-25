@@ -1,4 +1,4 @@
-package com.example.memorandum;
+package com.lapp.memorandum;
 
 import org.junit.Test;
 

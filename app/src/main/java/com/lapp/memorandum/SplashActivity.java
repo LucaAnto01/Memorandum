@@ -1,4 +1,4 @@
-package com.example.memorandum;
+package com.lapp.memorandum;
 
 import androidx.appcompat.app.AppCompatActivity;
 

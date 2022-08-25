@@ -1,4 +1,4 @@
-package com.example.memorandum;
+package com.lapp.memorandum;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -7,10 +7,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 
-import com.example.memorandum.databinding.ActivityMainBinding;
+import com.lapp.memorandum.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity
 {
