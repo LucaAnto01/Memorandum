@@ -22,6 +22,6 @@ public class SplashActivity extends AppCompatActivity
                 startActivity(new Intent(SplashActivity.this , MainActivity.class)); //run MainActivity after delay time
                 finish();
             }
-        } , 2250);
+        } , 1550);
     }
 }
