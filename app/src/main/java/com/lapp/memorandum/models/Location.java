@@ -1,7 +1,9 @@
-package com.lapp.memorandum;
+package com.lapp.memorandum.models;
+
+import io.realm.RealmObject;
 
 /*Class containing memo position data*/
-public class Location
+public class Location extends RealmObject
 {
     /*Attributes*/
     private String city;

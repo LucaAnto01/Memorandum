@@ -1,34 +1,33 @@
 package com.lapp.memorandum;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.android.material.button.MaterialButton;
+import com.lapp.memorandum.models.Location;
+import com.lapp.memorandum.models.Memo;
 
-import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
+import java.util.Date;
 import java.util.Locale;
+
+import io.realm.Realm;
 
 public class AddMemoActivity extends AppCompatActivity
 {
@@ -38,7 +37,11 @@ public class AddMemoActivity extends AppCompatActivity
     private EditText etDescription;
     private EditText etDate;
     private AutocompleteSupportFragment acPlace;
+    private MaterialButton mtAddMemo;
+
     private Calendar calendar;
+    private Location selectLocation;
+    private Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,8 +55,13 @@ public class AddMemoActivity extends AppCompatActivity
             etTitle = findViewById(R.id.etTitle);
             etDescription = findViewById(R.id.etDescription);
             etDate = findViewById(R.id.etDate);
+            mtAddMemo = findViewById(R.id.mtAddMemo);
 
             calendar = Calendar.getInstance(); //Setting calendar
+            selectLocation = new Location(); //Setting selected location
+
+            Realm.init(this);
+            realm = Realm.getDefaultInstance();
 
             setEtDateDatePickerDialog(); //Setting etDate Functionality
 
@@ -72,6 +80,9 @@ public class AddMemoActivity extends AppCompatActivity
 
             //Setting acPlace onclick listener
             setAcPlaceOnClickListener();
+
+            //Setting mtAddMemo onclick listener
+            setMtOnClickListener();
         }
 
         catch (Exception e)
@@ -155,6 +166,7 @@ public class AddMemoActivity extends AppCompatActivity
                     String test1 = place.getName();
                     String test2 = place.getId();
                     String test3 = place.getAddress(); // --> empty
+                    selectLocation.setAddress(place.getName());
                     Log.i("Ciao", "Place: " + place.getName() + ", " + place.getId());
                     //getAddress()  //getLatLang()
                 }
@@ -168,6 +180,55 @@ public class AddMemoActivity extends AppCompatActivity
             });
         }
 
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("AddMemoActivity", e.getMessage().toString(), this);
+        }
+    }
+
+    /**
+     * Method to set on click event listener for mtAddMemo
+     */
+    private void setMtOnClickListener()
+    {
+        try
+        {
+            mtAddMemo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view)
+                {
+                    try
+                    {
+                        String title = etTitle.getText().toString();
+                        String description = etDescription.getText().toString();
+                        String expiryDate = etDate.getText().toString();
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        Date dateExpiryDate = sdf.parse(expiryDate);
+                        //TODO: CREATE METHOD TO CHECK THE VALUE OF EDIT TEXT
+
+                        //Storing new data
+                        realm.beginTransaction();
+                        //TODO: populate test Location object with the value
+                        Location testLocation = realm.createObject(Location.class);
+                        testLocation.setAddress(selectLocation.getAddress());
+                        Memo memo = realm.createObject(Memo.class);
+                        memo.setTitle(title);
+                        memo.setDescription(description);
+                        memo.setExpiryDate(dateExpiryDate);
+                        memo.setDateOfCreation(new Date());
+                        memo.setCompleted(false);
+                        memo.setPlace(testLocation);
+                        realm.commitTransaction();
+                        Toast.makeText(AddMemoActivity.this, "Memo successfully saved", Toast.LENGTH_SHORT).show();
+                    }
+
+                    catch (Exception e)
+                    {
+                        ShowException.ShowExceptionMessage("AddMemoActivity", e.getMessage().toString(), AddMemoActivity.this);
+                    }
+                }
+            });
+        }
         catch (Exception e)
         {
             ShowException.ShowExceptionMessage("AddMemoActivity", e.getMessage().toString(), this);

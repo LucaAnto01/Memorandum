@@ -85,7 +85,7 @@
     </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/mbAddMemo"
+        android:id="@+id/mtAddMemo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Memo"

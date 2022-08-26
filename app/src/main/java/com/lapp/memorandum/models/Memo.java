@@ -1,8 +1,9 @@
-package com.lapp.memorandum;
+package com.lapp.memorandum.models;
 
 import java.util.*;
+import io.realm.RealmObject;
 
-public class Memo
+public class Memo extends RealmObject
 {
     /*Attributes*/
     private String title;
