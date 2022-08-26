@@ -7,6 +7,7 @@ public class Memo
     /*Attributes*/
     private String title;
     private String description;
+    private Date expiryDate;
     private Date dateOfCreation;
     private boolean isCompleted;
     private Location place;
@@ -18,13 +19,32 @@ public class Memo
     {
         setTitle("");
         setDescription("");
+        setExpiryDate(null);
         setDateOfCreation(null);
         setCompleted(false);
         setPlace(new Location());
     }
 
     /**
-     * Constructor method
+     * Constructor method without location
+     * @param title
+     * @param description
+     * @param expiryDate
+     * @param dateOfCreation
+     * @param isCompleted
+     */
+    public Memo(String title, String description, Date expiryDate, Date dateOfCreation, boolean isCompleted)
+    {
+        setTitle(title);
+        setDescription(description);
+        setExpiryDate(expiryDate);
+        setDateOfCreation(dateOfCreation);
+        setCompleted(isCompleted);
+        setPlace(new Location());
+    }
+
+    /**
+     * Constructor method without expiry date and location
      * @param title
      * @param description
      * @param dateOfCreation
@@ -34,6 +54,7 @@ public class Memo
     {
         setTitle(title);
         setDescription(description);
+        setExpiryDate(null);
         setDateOfCreation(dateOfCreation);
         setCompleted(isCompleted);
         setPlace(new Location());
@@ -47,10 +68,11 @@ public class Memo
      * @param isCompleted
      * @param place
      */
-    public Memo(String title, String description, Date dateOfCreation, boolean isCompleted, Location place)
+    public Memo(String title, String description, Date expiryDate, Date dateOfCreation, boolean isCompleted, Location place)
     {
         setTitle(title);
         setDescription(description);
+        setExpiryDate(expiryDate);
         setDateOfCreation(dateOfCreation);
         setCompleted(isCompleted);
         setPlace(place);
@@ -76,6 +98,10 @@ public class Memo
     {
         this.description = description;
     }
+
+    public Date getExpiryDate() { return expiryDate; }
+
+    public void setExpiryDate(Date expiryDate) { this.expiryDate = expiryDate; }
 
     public Date getDateOfCreation()
     {
