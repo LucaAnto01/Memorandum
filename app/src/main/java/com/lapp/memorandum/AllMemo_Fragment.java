@@ -1,64 +1,82 @@
 package com.lapp.memorandum;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.lapp.memorandum.models.Memo;
+import com.lapp.memorandum.utils.RVAdapter;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
+
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link AllMemo_Fragment#newInstance} factory method to
- * create an instance of this fragment.
+ * All memo fragment class
  */
-public class AllMemo_Fragment extends Fragment {
+public class AllMemo_Fragment extends Fragment
+{
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public AllMemo_Fragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AllMemo_Fragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AllMemo_Fragment newInstance(String param1, String param2) {
-        AllMemo_Fragment fragment = new AllMemo_Fragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    /*Attributes*/
+    private Context allMemoContext;
+    private RealmResults<Memo> memoList;
+    private RecyclerView rwAllMemo;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_all_memo_, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View view = null;
+        try
+        {
+            view = inflater.inflate(R.layout.fragment_all_memo_, container, false);
+            //Setting attributes
+            allMemoContext = getContext(); //Set context
+            //Getting data from database
+            Realm.init(allMemoContext);
+            Realm realm = Realm.getDefaultInstance();
+
+            memoList = realm.where(Memo.class).findAll(); //Select and get all Memo
+
+            rwAllMemo = (RecyclerView)view.findViewById(R.id.rwAllMemo);
+            rwAllMemo.setLayoutManager(new LinearLayoutManager(allMemoContext));
+
+            //Setting adapter to Memo list
+            RVAdapter rvAdapter = new RVAdapter(allMemoContext, memoList);
+            rwAllMemo.setAdapter(rvAdapter);
+
+            //Setting memo list change event listener
+            memoList.addChangeListener(new RealmChangeListener<RealmResults<Memo>>()
+            {
+                @Override
+                public void onChange(RealmResults<Memo> memos)
+                {
+                    rvAdapter.notifyDataSetChanged(); //This permit refresh the view when something in the list change
+                }
+            });
+        }
+
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("AllMemo_Fragment", e.getMessage().toString(), getContext());
+        }
+
+        return view;
     }
+
 }

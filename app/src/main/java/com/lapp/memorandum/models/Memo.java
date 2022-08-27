@@ -1,5 +1,6 @@
 package com.lapp.memorandum.models;
 
+import java.text.DateFormat;
 import java.util.*;
 import io.realm.RealmObject;
 
@@ -77,6 +78,37 @@ public class Memo extends RealmObject
         setDateOfCreation(dateOfCreation);
         setCompleted(isCompleted);
         setPlace(place);
+    }
+
+    /**
+     * Method to get the compose address String
+     * @return
+     */
+    public String getComposeAddress()
+    {
+        String composeAddress = "";
+
+        if(!getPlace().getAddress().equals(""))
+        {
+            composeAddress += getPlace().getAddress(); //Compose first part with the address
+
+            if(!getPlace().getCity().equals(""))
+                composeAddress += ", " + getPlace().getCity(); //Compose the second part with the city
+        }
+
+        return composeAddress;
+    }
+
+    /**
+     * Method to get the Expiry date formatted like this --> 11/01/2001
+     * @return
+     */
+    public String getExpiryDateFormatted()
+    {
+        if(getExpiryDate() != null)
+            return DateFormat.getDateInstance().format(getExpiryDate());
+
+        return "";
     }
 
     /*Getters & Setters*/

@@ -257,9 +257,17 @@ public class AddMemoActivity extends AppCompatActivity
      */
     public boolean checkInput()
     {
-        //Date of expiry and location isn't necessary
-        if((etTitle.getText().toString().equals("")) || (etDescription.getText().toString().equals("")))
-            return false;
+        try
+        {
+            //Date of expiry and location isn't necessary
+            if((etTitle.getText().toString().equals("")) || (etDescription.getText().toString().equals("")))
+                return false;
+        }
+
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("AddMemoActivity", e.getMessage().toString(), this);
+        }
 
         return true;
     }

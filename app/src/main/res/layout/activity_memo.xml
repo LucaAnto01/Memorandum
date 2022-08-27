@@ -30,17 +30,36 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/twTitle"
             android:text="Memo description"
-            android:textSize="14dp"/>
+            android:textSize="15dp"
+            android:maxLines="3"
+            android:scrollbars="vertical"/>
 
         <TextView
-            android:id="@+id/twExpirationDate"
+            android:id="@+id/twAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/twDescription"
+            android:textSize="14dp"
+            android:text="Memo address"/>
+
+        <TextView
+            android:id="@+id/twExpiryDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/twAddress"
+            android:textSize="14dp"
+            android:text="Expiry date"
+            android:gravity="end"/>
+
+        <!--<TextView
+            android:id="@+id/twExpirationDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/twExpiryDate"
             android:text="11/01/2001"
             android:textSize="12dp"
             android:fontFamily="sans-serif"
-            android:gravity="end"/>
+            android:gravity="end"/> -->
 
     </RelativeLayout>
 
