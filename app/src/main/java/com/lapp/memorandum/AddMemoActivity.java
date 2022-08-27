@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -162,13 +163,12 @@ public class AddMemoActivity extends AppCompatActivity
                 @Override
                 public void onPlaceSelected(@NonNull Place place)
                 {
-                    // TODO: CREATE OBJECT LOCATION AND MEMORIZE IT
-                    String test1 = place.getName();
-                    String test2 = place.getId();
-                    String test3 = place.getAddress(); // --> empty
+                    //Setting variables to select location object
+                    LatLng latLng = place.getLatLng();
+                    selectLocation.setCity(place.getName());
                     selectLocation.setAddress(place.getName());
-                    Log.i("Ciao", "Place: " + place.getName() + ", " + place.getId());
-                    //getAddress()  //getLatLang()
+                    selectLocation.setLatitude(latLng.latitude);
+                    selectLocation.setLongitude(latLng.longitude);
                 }
 
 
@@ -199,27 +199,43 @@ public class AddMemoActivity extends AppCompatActivity
                 {
                     try
                     {
-                        String title = etTitle.getText().toString();
-                        String description = etDescription.getText().toString();
-                        String expiryDate = etDate.getText().toString();
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                        Date dateExpiryDate = sdf.parse(expiryDate);
-                        //TODO: CREATE METHOD TO CHECK THE VALUE OF EDIT TEXT
+                        if(checkInput())
+                        {
+                            String title = etTitle.getText().toString();
+                            String description = etDescription.getText().toString();
+                            String expiryDate = etDate.getText().toString();
+                            Date dateExpiryDate = null;
+                            if(!expiryDate.equals(""))
+                            {
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                dateExpiryDate = sdf.parse(expiryDate);
+                            }
 
-                        //Storing new data
-                        realm.beginTransaction();
-                        //TODO: populate test Location object with the value
-                        Location testLocation = realm.createObject(Location.class);
-                        testLocation.setAddress(selectLocation.getAddress());
-                        Memo memo = realm.createObject(Memo.class);
-                        memo.setTitle(title);
-                        memo.setDescription(description);
-                        memo.setExpiryDate(dateExpiryDate);
-                        memo.setDateOfCreation(new Date());
-                        memo.setCompleted(false);
-                        memo.setPlace(testLocation);
-                        realm.commitTransaction();
-                        Toast.makeText(AddMemoActivity.this, "Memo successfully saved", Toast.LENGTH_SHORT).show();
+                            //Storing new data
+                            realm.beginTransaction();
+                            //Populate Location with value
+                            Location memoLocation = realm.createObject(Location.class);
+                            memoLocation.setCity(selectLocation.getCity());
+                            memoLocation.setAddress(selectLocation.getAddress());
+                            memoLocation.setLatitude(selectLocation.getLatitude());
+                            memoLocation.setLongitude(selectLocation.getLongitude());
+                            //Populate Memo with value
+                            Memo memo = realm.createObject(Memo.class);
+                            memo.setTitle(title);
+                            memo.setDescription(description);
+                            if(dateExpiryDate != null)
+                                memo.setExpiryDate(dateExpiryDate);
+                            memo.setDateOfCreation(new Date());
+                            memo.setCompleted(false);
+                            memo.setPlace(memoLocation);
+                            realm.commitTransaction();
+                            //Notify correct insertion
+                            Toast.makeText(AddMemoActivity.this, "Memo successfully saved", Toast.LENGTH_SHORT).show();
+                            finish(); //Close add memo activity
+                        }
+
+                        else
+                            ShowException.ShowExceptionMessage("AddMemoActivity", "Please, insert Title and Description", AddMemoActivity.this);
                     }
 
                     catch (Exception e)
@@ -233,5 +249,18 @@ public class AddMemoActivity extends AppCompatActivity
         {
             ShowException.ShowExceptionMessage("AddMemoActivity", e.getMessage().toString(), this);
         }
+    }
+
+    /**
+     * Method to check the completion of edit text
+     * @return
+     */
+    public boolean checkInput()
+    {
+        //Date of expiry and location isn't necessary
+        if((etTitle.getText().toString().equals("")) || (etDescription.getText().toString().equals("")))
+            return false;
+
+        return true;
     }
 }

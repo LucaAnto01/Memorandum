@@ -39,17 +39,6 @@ public class MemoFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v)
     {
-        startActivity(new Intent(getActivity(), AddMemoActivity.class));
-    }
-
-    /*Getters & Setters*/
-    public FloatingActionButton getFbAddMemo()
-    {
-        return fbAddMemo;
-    }
-
-    public void setFbAddMemo(FloatingActionButton fbAddMemo)
-    {
-        this.fbAddMemo = fbAddMemo;
+        startActivity(new Intent(getContext(), AddMemoActivity.class));
     }
 }
