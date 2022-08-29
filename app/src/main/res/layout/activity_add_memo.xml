@@ -35,7 +35,7 @@
             android:layout_margin="10dp"
             android:background="@color/inputBackgroundColor"
             android:hint="Memo title"
-            android:inputType="text"
+            android:inputType="textCapSentences|text"
             android:minHeight="48dp"
             android:padding="10dp"
             android:textColor="@color/black" />
@@ -48,7 +48,7 @@
             android:background="@color/inputBackgroundColor"
             android:padding="10dp"
             android:layout_margin="10dp"
-            android:inputType="textMultiLine"
+            android:inputType="textCapSentences|textMultiLine"
             android:lines="11"
             android:gravity="top"
             android:textColor="@color/black"/>
@@ -81,6 +81,14 @@
                 android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment" />
 
         </androidx.cardview.widget.CardView>
+
+        <CheckBox
+            android:id="@+id/cbCompleted"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:buttonTint="@color/primaryColor"
+            android:text="Completed"/>
 
     </LinearLayout>
 

@@ -14,7 +14,12 @@ public class Location extends RealmObject
     /**
      * Empty constructor method
      */
-    public Location()
+    public Location() {}
+
+    /**
+     * Constructor method for null set
+     */
+    public Location(int nulllSet)
     {
         setCity("");
         setAddress("");

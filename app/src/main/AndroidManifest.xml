@@ -14,10 +14,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Memorandum">
         <activity
-            android:name="com.lapp.memorandum.AddMemoActivity"
+            android:name=".MemoActivity"
             android:exported="false" />
         <activity
-            android:name="com.lapp.memorandum.SplashActivity"
+            android:name=".AddMemoActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,8 +30,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.lapp.memorandum.MainActivity"
-            android:exported="false"></activity>
+            android:name=".MainActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

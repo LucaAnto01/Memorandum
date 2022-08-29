@@ -1,12 +1,17 @@
 package com.lapp.memorandum.utils;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lapp.memorandum.R;
@@ -15,6 +20,7 @@ import com.lapp.memorandum.models.Memo;
 
 import java.text.DateFormat;
 
+import io.realm.Realm;
 import io.realm.RealmResults;
 
 /**
@@ -22,7 +28,6 @@ import io.realm.RealmResults;
  */
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MemoViewHolder>
 {
-
     Context rvAdapterContext;
     RealmResults<Memo> memoList;
 
@@ -67,6 +72,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MemoViewHolder>
             if((!memo.getTitle().equals(null)) ||  (!memo.getTitle().equals("")))//If Memo is setting
             {
                 holder.twTitle.setText(memo.getTitle()); //Setting title
+
+                if(memo.isCompleted()) //Check if memo is completed change title color to show the completed status
+                    holder.twTitle.setTextColor(Color.parseColor("#03A50E"));
+
                 holder.twDescription.setText(memo.getDescription()); //Setting description
 
                 String composeAddress = memo.getComposeAddress();
@@ -80,6 +89,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MemoViewHolder>
                     holder.twExpiryDate.setVisibility(View.INVISIBLE); //Setting invisible because there isn't
 
                 holder.twExpiryDate.setText(expiryDateFormatted);
+
+                setDeleteItemMethod(holder, memo); //Setting on long click method to delete the Memo
             }
         }
 
@@ -99,6 +110,44 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MemoViewHolder>
         return getMemoList().size();
     }
 
+    /**
+     * Method to set the delete item method after long press click
+     * @param holder
+     * @param memo
+     */
+    private void setDeleteItemMethod(MemoViewHolder holder, Memo memo)
+    {
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view)
+            {
+                PopupMenu menu = new PopupMenu(rvAdapterContext, view);
+                menu.getMenu().add("Click to delete");
+                menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item)
+                    {
+                        if(item.getTitle().equals("Click to delete"))
+                        {
+                            //delete memo
+                            Realm realm = Realm.getDefaultInstance();
+                            realm.beginTransaction();
+                            memo.deleteFromRealm();
+                            realm.commitTransaction();
+                            Toast.makeText(rvAdapterContext,"Memo deleted",Toast.LENGTH_SHORT).show();
+                        }
+                        return true;
+                    }
+                });
+
+                menu.show();
+
+                return true;
+            }
+        });
+    }
+
+
     /*Getters & Setters*/
     public Context getRvAdapterContext() { return rvAdapterContext; }
 
@@ -114,7 +163,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MemoViewHolder>
      */
     public class MemoViewHolder extends RecyclerView.ViewHolder
     {
-
         private TextView twTitle;
         private TextView twDescription;
         private TextView twAddress;

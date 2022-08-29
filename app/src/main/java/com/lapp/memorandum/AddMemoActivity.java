@@ -7,6 +7,7 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ public class AddMemoActivity extends AppCompatActivity
     private EditText etDescription;
     private EditText etDate;
     private AutocompleteSupportFragment acPlace;
+    private CheckBox cbCompleted;
     private MaterialButton mtAddMemo;
 
     private Calendar calendar;
@@ -56,10 +58,11 @@ public class AddMemoActivity extends AppCompatActivity
             etTitle = findViewById(R.id.etTitle);
             etDescription = findViewById(R.id.etDescription);
             etDate = findViewById(R.id.etDate);
+            cbCompleted = findViewById(R.id.cbCompleted);
             mtAddMemo = findViewById(R.id.mtAddMemo);
 
             calendar = Calendar.getInstance(); //Setting calendar
-            selectLocation = new Location(); //Setting selected location
+            selectLocation = new Location(0); //Setting selected location
 
             Realm.init(this);
             realm = Realm.getDefaultInstance();
@@ -144,7 +147,7 @@ public class AddMemoActivity extends AppCompatActivity
      */
     private void updateEtDateText()
     {
-        String dateFormat = "dd/MM/yy";
+        String dateFormat = "dd/MM/yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.ITALY);
 
         etDate.setText(sdf.format(calendar.getTime()));
@@ -204,12 +207,11 @@ public class AddMemoActivity extends AppCompatActivity
                             String title = etTitle.getText().toString();
                             String description = etDescription.getText().toString();
                             String expiryDate = etDate.getText().toString();
+                            boolean completed = cbCompleted.isChecked();
+
                             Date dateExpiryDate = null;
                             if(!expiryDate.equals(""))
-                            {
-                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                                dateExpiryDate = sdf.parse(expiryDate);
-                            }
+                                dateExpiryDate = new SimpleDateFormat("dd/MM/yyyy").parse(expiryDate);
 
                             //Storing new data
                             realm.beginTransaction();
@@ -228,6 +230,7 @@ public class AddMemoActivity extends AppCompatActivity
                             memo.setDateOfCreation(new Date());
                             memo.setCompleted(false);
                             memo.setPlace(memoLocation);
+                            memo.setCompleted(completed);
                             realm.commitTransaction();
                             //Notify correct insertion
                             Toast.makeText(AddMemoActivity.this, "Memo successfully saved", Toast.LENGTH_SHORT).show();
@@ -255,7 +258,7 @@ public class AddMemoActivity extends AppCompatActivity
      * Method to check the completion of edit text
      * @return
      */
-    public boolean checkInput()
+    private boolean checkInput()
     {
         try
         {

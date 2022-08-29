@@ -9,22 +9,30 @@ public class Memo extends RealmObject
     /*Attributes*/
     private String title;
     private String description;
-    private Date expiryDate;
+    public Date expiryDate;
     private Date dateOfCreation;
     private boolean isCompleted;
+    public boolean isExpiry;
     private Location place;
 
     /**
      * Empty constructor method
      */
-    public Memo()
+    public Memo() {}
+
+    /**
+     * Constructor method for null set
+     * @param nullSet
+     */
+    public Memo(int nullSet)
     {
         setTitle("");
         setDescription("");
         setExpiryDate(null);
         setDateOfCreation(null);
         setCompleted(false);
-        setPlace(new Location());
+        setExpiry(false);
+        setPlace(new Location(0));
     }
 
     /**
@@ -42,7 +50,8 @@ public class Memo extends RealmObject
         setExpiryDate(expiryDate);
         setDateOfCreation(dateOfCreation);
         setCompleted(isCompleted);
-        setPlace(new Location());
+        setPlace(new Location(0));
+        setIfIsExpiry();
     }
 
     /**
@@ -59,7 +68,8 @@ public class Memo extends RealmObject
         setExpiryDate(null);
         setDateOfCreation(dateOfCreation);
         setCompleted(isCompleted);
-        setPlace(new Location());
+        setPlace(new Location(0));
+        setExpiry(false);
     }
 
     /**
@@ -78,6 +88,7 @@ public class Memo extends RealmObject
         setDateOfCreation(dateOfCreation);
         setCompleted(isCompleted);
         setPlace(place);
+        setIfIsExpiry();
     }
 
     /**
@@ -111,6 +122,38 @@ public class Memo extends RealmObject
         return "";
     }
 
+    /**
+     * Method to check if the Memo is expiry
+     * true --> expiry
+     * @return
+     */
+    private void setIfIsExpiry()
+    {
+        Date currentDate = new Date(); //Set current date
+        Calendar calendarCurrentDate = Calendar.getInstance();
+        calendarCurrentDate.setTime(currentDate);
+
+        Date check = getExpiryDate();
+        Calendar calendarCheckDate = Calendar.getInstance();
+        calendarCheckDate.setTime(check);
+
+        if(calendarCheckDate.get(Calendar.YEAR) < calendarCurrentDate.get(Calendar.YEAR)) //Checking value of year
+            setExpiry(true);
+        else if(calendarCheckDate.get(Calendar.YEAR) == calendarCurrentDate.get(Calendar.YEAR))
+        {
+            if(calendarCheckDate.get(Calendar.MONTH) < calendarCurrentDate.get(Calendar.MONTH)) //Checking value of month
+                setExpiry(true);
+            else if(calendarCheckDate.get(Calendar.MONTH) == calendarCurrentDate.get(Calendar.MONTH))
+            {
+                if(calendarCheckDate.get(Calendar.DAY_OF_MONTH) < calendarCurrentDate.get(Calendar.DAY_OF_MONTH)) //Checking value of day of month
+                    setExpiry(true);
+
+                else
+                    setExpiry(false);
+            }
+        }
+    }
+
     /*Getters & Setters*/
     public String getTitle()
     {
@@ -134,7 +177,7 @@ public class Memo extends RealmObject
 
     public Date getExpiryDate() { return expiryDate; }
 
-    public void setExpiryDate(Date expiryDate) { this.expiryDate = expiryDate; }
+    public void setExpiryDate(Date expiryDate) { this.expiryDate = expiryDate; if(expiryDate != null) setIfIsExpiry(); else setExpiry(false);}
 
     public Date getDateOfCreation()
     {
@@ -149,6 +192,10 @@ public class Memo extends RealmObject
     public boolean isCompleted() { return isCompleted; }
 
     public void setCompleted(boolean completed) { isCompleted = completed; }
+
+    public boolean getExpiry() { return isExpiry; }
+
+    public void setExpiry(boolean expiry) { isExpiry = expiry; }
 
     public Location getPlace() { return place; }
 
