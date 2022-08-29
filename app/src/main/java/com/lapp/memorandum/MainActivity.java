@@ -1,12 +1,18 @@
 package com.lapp.memorandum;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.lapp.memorandum.databinding.ActivityMainBinding;
 
@@ -29,6 +35,8 @@ public class MainActivity extends AppCompatActivity
 
             //Setting bottomNavigationView listener
             binding.bottomNavigationView.setOnItemSelectedListener(this::NavigationItemClick);
+
+            checkUserPermission(); //Check user permission
         }
 
         catch (Exception e)
@@ -36,6 +44,35 @@ public class MainActivity extends AppCompatActivity
             ShowException.ShowExceptionMessage("MainActivity", e.getMessage().toString(), this);
         }
 
+    }
+
+    /**
+     * Method to manage user permission
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode)
+        {
+            case 1:
+            {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+                    {
+                        Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else
+                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+
+                return;
+            }
+        }
     }
 
     /**
@@ -85,6 +122,27 @@ public class MainActivity extends AppCompatActivity
         catch (Exception e)
         {
             ShowException.ShowExceptionMessage("MainActivity", e.getMessage().toString(), this);
+        }
+    }
+
+    /**
+     * Method to check the user permission
+     */
+    private void checkUserPermission()
+    {
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
+        }
+
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
+        }
+
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.INTERNET}, 101);
         }
     }
 }
