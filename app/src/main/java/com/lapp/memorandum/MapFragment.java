@@ -17,8 +17,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.lapp.memorandum.models.Memo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Map fragment
@@ -64,28 +73,44 @@ public class MapFragment extends Fragment
      */
     private void setMap()
     {
-        supportMapFragment.getMapAsync(new OnMapReadyCallback() { //Async map
-            @Override
-            public void onMapReady(@NonNull GoogleMap googleMap) //When map is ready
-            {
-                googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener()
+        try
+        {
+            supportMapFragment.getMapAsync(new OnMapReadyCallback() { //Async map
+                @Override
+                public void onMapReady(@NonNull GoogleMap googleMap) //When map is ready
                 {
-                    @Override
-                    public void onMapClick(@NonNull LatLng latLng) //Click on map
+                    googleMap.clear(); //Clear map from holder marker
+
+                    Realm.init(getContext());
+                    Realm realm = Realm.getDefaultInstance();
+                    RealmResults<Memo> memoList = realm.where(Memo.class).equalTo("isExpiry", false).
+                            equalTo("isCompleted", false).findAll(); //Select and get the valid Memo
+
+                    //Adding map Marker on position
+                    for (Memo currentMemo: memoList)
                     {
-                        MarkerOptions userPosition = new MarkerOptions();
-                        userPosition.position(latLng); //User location
-                        userPosition.title("You're here!"); //Set the title of the marker
-
-                        googleMap.clear(); //Clear map from holder marker
-
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10)); //Focus on position animated
-
-                        googleMap.addMarker(userPosition); //Add marker to map
+                        if((currentMemo.getPlace().getLatitude() != -1) && (currentMemo.getPlace().getLongitude() != -1)) //If Memo Location is set
+                        {
+                            LatLng memoLocation = new LatLng(currentMemo.getPlace().getLatitude(), currentMemo.getPlace().getLongitude());
+                            MarkerOptions memoMarker = new MarkerOptions();
+                            memoMarker.position(memoLocation);
+                            memoMarker.title(currentMemo.getTitle());
+                            //memoMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.memo_map_icon));
+                            googleMap.addMarker(memoMarker);
+                        }
                     }
-                });
-            }
-        });
+
+                    LatLng latLng = new LatLng(44.8036, 10.33); //TODO: change with user location
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10)); //Focus on position animated
+
+                }
+            });
+        }
+
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("Map_Fragment", e.getMessage().toString(), getContext());
+        }
     }
 
     /**
