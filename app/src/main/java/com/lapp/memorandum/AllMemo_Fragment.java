@@ -18,6 +18,7 @@ import com.lapp.memorandum.utils.RVAdapter;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * All memo fragment class
@@ -49,7 +50,7 @@ public class AllMemo_Fragment extends Fragment
             Realm.init(allMemoContext);
             Realm realm = Realm.getDefaultInstance();
 
-            memoList = realm.where(Memo.class).findAll(); //Select and get all Memo
+            memoList = realm.where(Memo.class).sort("expiryDate", Sort.ASCENDING).findAll(); //Select and get all Memo
 
             rwAllMemo = (RecyclerView)view.findViewById(R.id.rwAllMemo);
             rwAllMemo.setLayoutManager(new LinearLayoutManager(allMemoContext));

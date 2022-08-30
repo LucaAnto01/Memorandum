@@ -64,6 +64,7 @@ public class AddMemoActivity extends AppCompatActivity
             calendar = Calendar.getInstance(); //Setting calendar
             selectLocation = new Location(0); //Setting selected location
 
+            /*GETTING MEMO*/
             Realm.init(this);
             realm = Realm.getDefaultInstance();
 
@@ -80,7 +81,7 @@ public class AddMemoActivity extends AppCompatActivity
             acPlace = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.acPlace);
             // Specify the types of place data to return.
             acPlace.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
-            acPlace.setCountries("IT");
+            acPlace.setCountries("IT", "CH", "US", "AU", "AT");
 
             //Setting acPlace onclick listener
             setAcPlaceOnClickListener();

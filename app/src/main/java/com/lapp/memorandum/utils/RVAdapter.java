@@ -76,6 +76,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MemoViewHolder>
                 if(memo.isCompleted()) //Check if memo is completed change title color to show the completed status
                     holder.twTitle.setTextColor(Color.parseColor("#03A50E"));
 
+                if(memo.getExpiry()) //Check if memo is expiry
+                    holder.twTitle.setTextColor(Color.parseColor("#FFA500"));
+
                 holder.twDescription.setText(memo.getDescription()); //Setting description
 
                 String composeAddress = memo.getComposeAddress();

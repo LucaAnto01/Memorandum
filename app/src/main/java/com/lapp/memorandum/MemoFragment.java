@@ -26,6 +26,7 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class MemoFragment extends Fragment implements View.OnClickListener
 {
@@ -49,6 +50,9 @@ public class MemoFragment extends Fragment implements View.OnClickListener
         try
         {
             view = inflater.inflate(R.layout.fragment_memo, container, false);
+
+            updateMemo(); //Update memo
+
             //Setting attributes
             fbAddMemo = (FloatingActionButton) view.findViewById(R.id.fbAddMemo);
             fbAddMemo.setOnClickListener(this);
@@ -57,7 +61,10 @@ public class MemoFragment extends Fragment implements View.OnClickListener
             Realm.init(memoContext);
             Realm realm = Realm.getDefaultInstance();
 
-            memoList = realm.where(Memo.class).equalTo("isExpiry", false).findAll(); //Select and get all Memo
+
+
+            memoList = realm.where(Memo.class).equalTo("isExpiry", false).equalTo("isCompleted", false).
+                       sort("expiryDate", Sort.ASCENDING).findAll(); //Select and get the valid Memo
 
             //memoList = realm.where(Memo.class).findAll();
             rwMemo = (RecyclerView)view.findViewById(R.id.rwMemo);
@@ -84,6 +91,34 @@ public class MemoFragment extends Fragment implements View.OnClickListener
         }
 
         return view;
+    }
+
+    /**
+     * Method to update the state of expiry date of the stored Memo
+     */
+    private void updateMemo()
+    {
+        try
+        {
+            Realm.init(getContext());
+            Realm realm = Realm.getDefaultInstance();
+
+            RealmResults<Memo> memoToUpdate = realm.where(Memo.class).findAll(); //Select and get all Memo
+
+            for (Memo currentMemo: memoToUpdate)
+            {
+                realm.beginTransaction();
+                currentMemo.setIfIsExpiry();
+                realm.commitTransaction();
+            }
+
+            //realm.copyToRealmOrUpdate(memoToUpdate);
+        }
+
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("Memo_Fragment", e.getMessage().toString(), getContext());
+        }
     }
 
     /**

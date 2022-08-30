@@ -127,29 +127,32 @@ public class Memo extends RealmObject
      * true --> expiry
      * @return
      */
-    private void setIfIsExpiry()
+    public void setIfIsExpiry()
     {
-        Date currentDate = new Date(); //Set current date
-        Calendar calendarCurrentDate = Calendar.getInstance();
-        calendarCurrentDate.setTime(currentDate);
-
-        Date check = getExpiryDate();
-        Calendar calendarCheckDate = Calendar.getInstance();
-        calendarCheckDate.setTime(check);
-
-        if(calendarCheckDate.get(Calendar.YEAR) < calendarCurrentDate.get(Calendar.YEAR)) //Checking value of year
-            setExpiry(true);
-        else if(calendarCheckDate.get(Calendar.YEAR) == calendarCurrentDate.get(Calendar.YEAR))
+        if(expiryDate != null)
         {
-            if(calendarCheckDate.get(Calendar.MONTH) < calendarCurrentDate.get(Calendar.MONTH)) //Checking value of month
-                setExpiry(true);
-            else if(calendarCheckDate.get(Calendar.MONTH) == calendarCurrentDate.get(Calendar.MONTH))
-            {
-                if(calendarCheckDate.get(Calendar.DAY_OF_MONTH) < calendarCurrentDate.get(Calendar.DAY_OF_MONTH)) //Checking value of day of month
-                    setExpiry(true);
+            Date currentDate = new Date(); //Set current date
+            Calendar calendarCurrentDate = Calendar.getInstance();
+            calendarCurrentDate.setTime(currentDate);
 
-                else
-                    setExpiry(false);
+            Date check = getExpiryDate();
+            Calendar calendarCheckDate = Calendar.getInstance();
+            calendarCheckDate.setTime(check);
+
+            if(calendarCheckDate.get(Calendar.YEAR) < calendarCurrentDate.get(Calendar.YEAR)) //Checking value of year
+                setExpiry(true);
+            else if(calendarCheckDate.get(Calendar.YEAR) == calendarCurrentDate.get(Calendar.YEAR))
+            {
+                if(calendarCheckDate.get(Calendar.MONTH) < calendarCurrentDate.get(Calendar.MONTH)) //Checking value of month
+                    setExpiry(true);
+                else if(calendarCheckDate.get(Calendar.MONTH) == calendarCurrentDate.get(Calendar.MONTH))
+                {
+                    if(calendarCheckDate.get(Calendar.DAY_OF_MONTH) < calendarCurrentDate.get(Calendar.DAY_OF_MONTH)) //Checking value of day of month
+                        setExpiry(true);
+
+                    else
+                        setExpiry(false);
+                }
             }
         }
     }

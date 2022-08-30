@@ -39,6 +39,7 @@ public class MapFragment extends Fragment
 
         try
         {
+            view = inflater.inflate(R.layout.fragment_map, container, false);
             if ((ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) ||
                (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) //If don't have map permission
             {
@@ -46,7 +47,6 @@ public class MapFragment extends Fragment
                 (new Handler()).postDelayed(this::closeApp, 10000);
             }
 
-            view = inflater.inflate(R.layout.fragment_map, container, false);
             supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.frgMap);
             setMap();
         }
