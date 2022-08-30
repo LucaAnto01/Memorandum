@@ -223,7 +223,15 @@ public class AddMemoActivity extends AppCompatActivity
                             memoLocation.setLatitude(selectLocation.getLatitude());
                             memoLocation.setLongitude(selectLocation.getLongitude());
                             //Populate Memo with value
-                            Memo memo = realm.createObject(Memo.class);
+                            // increment id --> primary key
+                            Number currentIdNum = realm.where(Memo.class).max("id");
+                            int nextId;
+                            if(currentIdNum == null)
+                                nextId = 1;
+                            else
+                                nextId = currentIdNum.intValue() + 1;
+                            Memo memo = realm.createObject(Memo.class, nextId);
+                            //memo.setId(nextId);
                             memo.setTitle(title);
                             memo.setDescription(description);
                             if(dateExpiryDate != null)

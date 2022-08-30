@@ -3,9 +3,12 @@ package com.lapp.memorandum.models;
 import java.text.DateFormat;
 import java.util.*;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class Memo extends RealmObject
 {
+    @PrimaryKey
+    private int id;
     /*Attributes*/
     private String title;
     private String description;
@@ -158,6 +161,10 @@ public class Memo extends RealmObject
     }
 
     /*Getters & Setters*/
+    public int getId() { return id; }
+
+    public void setId(int id) { this.id = id; }
+
     public String getTitle()
     {
         return title;
