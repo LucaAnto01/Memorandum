@@ -176,6 +176,7 @@ public class AddMemoActivity extends AppCompatActivity
                 @Override
                 public void onPlaceSelected(@NonNull Place place)
                 {
+                    selectLocation = new Location();
                     //Setting variables to select location object
                     LatLng latLng = place.getLatLng();
                     selectLocation.setCity(place.getName());
