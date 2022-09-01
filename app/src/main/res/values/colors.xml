@@ -7,4 +7,17 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!--Personal colors-->
+    <color name="primaryColor">#03C16F</color>
+    <color name="primaryColorVariant">#03A55F</color>
+    <color name="primaryColorVariant_1">#03A50E</color>
+    <color name="primaryColorVariant_2">#03D87C</color>
+    <color name="primaryColor_night">#027442</color>
+    <color name="primaryColorVariant_night">#026C74</color>
+    <color name="rippleBottomMenuColor">#F7F7F7</color>
+    <color name="notSelectedItemColor">#272727</color>
+    <color name="memoItemBackground">#EDEDED</color>
+    <color name="inputBackgroundColor">#E0E0E0</color>
+
 </resources>

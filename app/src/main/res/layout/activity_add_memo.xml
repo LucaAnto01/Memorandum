@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp"
+    android:orientation="vertical"
+    tools:context=".AddMemoActivity"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/twAddMemo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add new Memo"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_margin="15dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/round_corners_background">
+
+        <EditText
+            android:id="@+id/etTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/inputBackgroundColor"
+            android:hint="Memo title"
+            android:inputType="textCapSentences|text"
+            android:minHeight="48dp"
+            android:padding="10dp"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/etDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Memo description"
+            android:background="@color/inputBackgroundColor"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:inputType="textCapSentences|textMultiLine"
+            android:lines="11"
+            android:gravity="top"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/etDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Date"
+            android:background="@color/inputBackgroundColor"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:textColor="@color/black"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cwAutoComplete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/inputBackgroundColor"
+            android:backgroundTint="@color/inputBackgroundColor">
+
+            <fragment android:id="@+id/acPlace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment" />
+
+        </androidx.cardview.widget.CardView>
+
+        <CheckBox
+            android:id="@+id/cbCompleted"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:buttonTint="@color/primaryColor"
+            android:text="Completed"/>
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mtAddMemo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Memo"
+        android:layout_gravity="center" />
+
+</LinearLayout>
