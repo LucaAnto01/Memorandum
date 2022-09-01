@@ -3,9 +3,14 @@ package com.lapp.memorandum;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -19,6 +24,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -42,12 +48,12 @@ public class MapFragment extends Fragment
     private SupportMapFragment supportMapFragment;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    { super.onCreate(savedInstanceState); }
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = null;
 
         try
@@ -61,10 +67,9 @@ public class MapFragment extends Fragment
             supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.frgMap);
             setMap();
         }
-
         catch (Exception e)
         {
-            ShowException.ShowExceptionMessage("Map_Fragment", e.getMessage().toString(), getContext());
+            ShowException.ShowExceptionMessage("MapFragment", e.getMessage().toString(), getContext());
         }
 
         return view;
@@ -83,6 +88,9 @@ public class MapFragment extends Fragment
                 {
                     googleMap.clear(); //Clear map from holder marker
 
+                    if (!(ActivityCompat.checkSelfPermission(mapContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) && !(ActivityCompat.checkSelfPermission(mapContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED))
+                        googleMap.setMyLocationEnabled(true);
+
                     Realm.init(getContext());
                     Realm realm = Realm.getDefaultInstance();
                     RealmResults<Memo> memoList = realm.where(Memo.class).equalTo("isExpiry", false).
@@ -97,22 +105,49 @@ public class MapFragment extends Fragment
                             MarkerOptions memoMarker = new MarkerOptions();
                             memoMarker.position(memoLocation);
                             memoMarker.title(currentMemo.getTitle());
-                            //memoMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.memo_map_icon));
+                            memoMarker.snippet(currentMemo.getDescription());
+                            memoMarker.icon(createMarker(mapContext, R.drawable.memo_map_icon));
                             googleMap.addMarker(memoMarker);
                         }
                     }
 
-                    LatLng latLng = new LatLng(44.8036, 10.33); //TODO: change with user location
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10)); //Focus on position animated
-
+                    if(MemoAppData.getUserLocation() != null)
+                    {
+                        //Adding user position
+                        LatLng latLng = new LatLng(MemoAppData.getUserLocation().getLatitude(), MemoAppData.getUserLocation().getLongitude());
+                        MarkerOptions userMarker = new MarkerOptions();
+                        userMarker.position(latLng);
+                        userMarker.title("You're here!");
+                        googleMap.addMarker(userMarker);
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10)); //Focus on position animated
+                    }
                 }
             });
         }
 
         catch (Exception e)
         {
-            ShowException.ShowExceptionMessage("Map_Fragment", e.getMessage().toString(), getContext());
+            ShowException.ShowExceptionMessage("MapFragment", e.getMessage().toString(), getContext());
         }
+    }
+
+    /**
+     * Method to custom Maps Marker
+     * @param context
+     * @param vectorDrawableResourceId
+     * @return
+     */
+    private BitmapDescriptor createMarker(Context context, @DrawableRes int vectorDrawableResourceId)
+    {
+        Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
+        //Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+        //vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20);
+        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        background.draw(canvas);
+        //vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
     /**

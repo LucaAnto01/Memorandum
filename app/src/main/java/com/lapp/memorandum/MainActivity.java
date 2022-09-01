@@ -9,19 +9,24 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.lapp.memorandum.databinding.ActivityMainBinding;
+import com.lapp.memorandum.services.LocationManaging;
 import com.lapp.memorandum.utils.MemoAppData;
 
 public class MainActivity extends AppCompatActivity
 {
     private ActivityMainBinding binding;
+    private LocationManaging locationManaging;
     private final int permissionRequestCode = 100;
 
     @Override
@@ -34,8 +39,8 @@ public class MainActivity extends AppCompatActivity
             binding = ActivityMainBinding.inflate(getLayoutInflater());
             setContentView(binding.getRoot());
 
-            //Intent servIntent = new Intent("android.intent.action.TRAKPOSITIONSERVICE");
-            //startService(servIntent);
+            locationManaging = new LocationManaging(this);
+
 
             ReplaceFragment(new MemoFragment()); //Default selected item
             binding.bottomNavigationView.setSelectedItemId(R.id.memo);

@@ -13,7 +13,7 @@ public class MemoAppData
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.INTERNET};
     private static PermissionManager permissionManager = null; //Default is null
-    private static Location userLocation;
+    private static Location userLocation = null;
 
     public static String getApiKey()
     {
