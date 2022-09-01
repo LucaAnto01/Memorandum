@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -22,6 +21,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.android.material.button.MaterialButton;
 import com.lapp.memorandum.models.Location;
 import com.lapp.memorandum.models.Memo;
+import com.lapp.memorandum.utils.MemoAppData;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;

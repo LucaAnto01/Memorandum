@@ -1,5 +1,6 @@
 package com.lapp.memorandum;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -16,10 +17,12 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.lapp.memorandum.databinding.ActivityMainBinding;
+import com.lapp.memorandum.utils.MemoAppData;
 
 public class MainActivity extends AppCompatActivity
 {
     private ActivityMainBinding binding;
+    private final int permissionRequestCode = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -47,7 +50,6 @@ public class MainActivity extends AppCompatActivity
         {
             ShowException.ShowExceptionMessage("MainActivity", e.getMessage().toString(), this);
         }
-
     }
 
     /**
@@ -134,7 +136,14 @@ public class MainActivity extends AppCompatActivity
      */
     private void checkUserPermission()
     {
-        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+
+        if(!MemoAppData.getPermissionManager(this).checkPermissions(MemoAppData.getPermissions()))
+            MemoAppData.getPermissionManager(this).askPermission(this, MemoAppData.getPermissions(), permissionRequestCode);
+
+        else
+            Toast.makeText(this, "All permission granted!", Toast.LENGTH_SHORT).show();
+
+        /*if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
         }
@@ -147,6 +156,6 @@ public class MainActivity extends AppCompatActivity
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED)
         {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.INTERNET}, 101);
-        }
+        }*/
     }
 }

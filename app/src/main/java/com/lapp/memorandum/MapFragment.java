@@ -1,6 +1,7 @@
 package com.lapp.memorandum;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -12,6 +13,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,6 +23,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.lapp.memorandum.models.Memo;
+import com.lapp.memorandum.utils.MemoAppData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +38,7 @@ import io.realm.Sort;
 public class MapFragment extends Fragment
 {
     /*Attributes*/
+    private Context mapContext;
     private SupportMapFragment supportMapFragment;
 
     @Override
@@ -49,12 +53,10 @@ public class MapFragment extends Fragment
         try
         {
             view = inflater.inflate(R.layout.fragment_map, container, false);
-            if ((ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) ||
-               (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) //If don't have map permission
-            {
-                ShowException.ShowExceptionMessage("Map_Fragment", "Before being able to access this functionality, it is necessary grant permissions for the position", getContext());
-                (new Handler()).postDelayed(this::closeApp, 10000);
-            }
+            mapContext = getContext();
+
+            //Check user permission
+            checkUSerPermission();
 
             supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.frgMap);
             setMap();
@@ -121,4 +123,16 @@ public class MapFragment extends Fragment
         getActivity().finish();
         System.exit(0);
     }
+
+    /**
+     * Method to check the user permission
+     */
+    private void checkUSerPermission()
+    {
+        if(!MemoAppData.getPermissionManager(getMapContext()).checkPermissions(MemoAppData.getPermissions()))
+            Toast.makeText(getMapContext(), "Please, leave the necessary permissions", Toast.LENGTH_SHORT).show();
+    }
+
+    /*Getters*/
+    public Context getMapContext() { return mapContext; }
 }
