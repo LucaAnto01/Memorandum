@@ -1,6 +1,7 @@
 package com.lapp.memorandum.models;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -114,7 +115,7 @@ public class Memo extends RealmObject
     }
 
     /**
-     * Method to get the Expiry date formatted like this --> 11/01/2001
+     * Method to get the Expiry date formatted like this --> 11 JAN 2001
      * @return
      */
     public String getExpiryDateFormatted()
@@ -123,6 +124,18 @@ public class Memo extends RealmObject
             return DateFormat.getDateInstance().format(getExpiryDate());
 
         return "";
+    }
+
+    /**
+     * Method to get the Expiry date formatted like this --> 11/01/2001
+     * @return
+     */
+    public String expiryDateToString()
+    {
+        String format = "dd/MM/yyyy";
+        DateFormat dateFormat = new SimpleDateFormat(format);
+
+        return dateFormat.format(getExpiryDate());
     }
 
     /**

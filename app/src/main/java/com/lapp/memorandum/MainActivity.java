@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity
             binding = ActivityMainBinding.inflate(getLayoutInflater());
             setContentView(binding.getRoot());
 
-            Intent servIntent = new Intent("android.intent.action.TRAKPOSITIONSERVICE");
+            //Intent servIntent = new Intent("android.intent.action.TRAKPOSITIONSERVICE");
             //startService(servIntent);
 
             ReplaceFragment(new MemoFragment()); //Default selected item

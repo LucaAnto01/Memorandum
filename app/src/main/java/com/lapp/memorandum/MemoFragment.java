@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.lapp.memorandum.models.Memo;
 import com.lapp.memorandum.utils.RVAdapter;
+import com.lapp.memorandum.utils.RVTouchAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,20 +53,13 @@ public class MemoFragment extends Fragment implements View.OnClickListener
         {
             view = inflater.inflate(R.layout.fragment_memo, container, false);
 
-            updateMemo(); //Update memo
-
             //Setting attributes
             fbAddMemo = (FloatingActionButton) view.findViewById(R.id.fbAddMemo);
             fbAddMemo.setOnClickListener(this);
             memoContext = getContext(); //Set context
+
             //Getting data from database
-            Realm.init(memoContext);
-            Realm realm = Realm.getDefaultInstance();
-
-
-
-            memoList = realm.where(Memo.class).equalTo("isExpiry", false).equalTo("isCompleted", false).
-                       sort("expiryDate", Sort.ASCENDING).findAll(); //Select and get the valid Memo
+            updateMemo(); //Update memo
 
             //memoList = realm.where(Memo.class).findAll();
             rwMemo = (RecyclerView)view.findViewById(R.id.rwMemo);
@@ -73,6 +68,8 @@ public class MemoFragment extends Fragment implements View.OnClickListener
             //Setting adapter to Memo list
             rvAdapter = new RVAdapter(memoContext, memoList);
             rwMemo.setAdapter(rvAdapter);
+            ItemTouchHelper rvTouchAdapter = new ItemTouchHelper(new RVTouchAdapter(rvAdapter));
+            rvTouchAdapter.attachToRecyclerView(rwMemo);
 
             //Setting memo list change event listener
             memoList.addChangeListener(new RealmChangeListener<RealmResults<Memo>>()
@@ -87,7 +84,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener
 
         catch (Exception e)
         {
-            ShowException.ShowExceptionMessage("Memo_Fragment", e.getMessage().toString(), getContext());
+            ShowException.ShowExceptionMessage("MemoFragment", e.getMessage().toString(), getContext());
         }
 
         return view;
@@ -112,12 +109,32 @@ public class MemoFragment extends Fragment implements View.OnClickListener
                 realm.commitTransaction();
             }
 
-            //realm.copyToRealmOrUpdate(memoToUpdate);
+            updateMemoList();
         }
 
         catch (Exception e)
         {
-            ShowException.ShowExceptionMessage("Memo_Fragment", e.getMessage().toString(), getContext());
+            ShowException.ShowExceptionMessage("MemoFragment", e.getMessage().toString(), getContext());
+        }
+    }
+
+    /**
+     * Method to update Memo List
+     */
+    private void updateMemoList()
+    {
+        try
+        {
+            Realm.init(memoContext);
+            Realm realm = Realm.getDefaultInstance();
+
+            memoList = realm.where(Memo.class).equalTo("isExpiry", false).equalTo("isCompleted", false).
+                    sort("expiryDate", Sort.ASCENDING).findAll(); //Select and get the valid Memo
+        }
+
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("MemoFragment", e.getMessage().toString(), getContext());
         }
     }
 
@@ -129,6 +146,9 @@ public class MemoFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v)
     {
-        startActivity(new Intent(getContext(), AddMemoActivity.class));
+        Intent intent = new Intent(getContext(), AddMemoActivity.class);
+        intent.putExtra("action", "insert");
+        startActivity(intent);
+        updateMemo();
     }
 }

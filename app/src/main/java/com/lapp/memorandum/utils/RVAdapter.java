@@ -1,7 +1,9 @@
 package com.lapp.memorandum.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.lapp.memorandum.AddMemoActivity;
 import com.lapp.memorandum.R;
 import com.lapp.memorandum.ShowException;
 import com.lapp.memorandum.models.Memo;
@@ -28,8 +31,8 @@ import io.realm.RealmResults;
  */
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MemoViewHolder>
 {
-    Context rvAdapterContext;
-    RealmResults<Memo> memoList;
+    private Context rvAdapterContext;
+    private RealmResults<Memo> memoList;
 
     public RVAdapter(Context context, RealmResults<Memo> memoList)
     {
@@ -150,6 +153,24 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MemoViewHolder>
         });
     }
 
+    /**
+     * Method to edit Memo
+     */
+    public void editMemo(int position)
+    {
+        Memo selectedMemo = memoList.get(position);
+
+        //Passing data to add form for edit it
+        /*Bundle bundle = new Bundle();
+        bundle.putInt("id", selectedMemo.getId());
+        bundle.putInt("isUpdate", 1); //--> update operation*/
+
+        //Prepare to update memo
+        Intent intent = new Intent(rvAdapterContext, AddMemoActivity.class);
+        intent.putExtra("action", "update");
+        intent.putExtra("id", selectedMemo.getId());
+        rvAdapterContext.startActivity(intent);
+    }
 
     /*Getters & Setters*/
     public Context getRvAdapterContext() { return rvAdapterContext; }

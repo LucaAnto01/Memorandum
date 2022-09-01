@@ -42,6 +42,8 @@ public class AddMemoActivity extends AppCompatActivity
     private CheckBox cbCompleted;
     private MaterialButton mtAddMemo;
 
+    private String action;
+    private Memo memoToEdit;
     private Calendar calendar;
     private Location selectLocation;
     private Realm realm;
@@ -64,7 +66,7 @@ public class AddMemoActivity extends AppCompatActivity
             calendar = Calendar.getInstance(); //Setting calendar
             selectLocation = new Location(0); //Setting selected location
 
-            /*GETTING MEMO*/
+            /*Create Realm instance*/
             Realm.init(this);
             realm = Realm.getDefaultInstance();
 
@@ -88,6 +90,13 @@ public class AddMemoActivity extends AppCompatActivity
 
             //Setting mtAddMemo onclick listener
             setMtOnClickListener();
+
+            action = getIntent().getExtras().getString("action"); //Setting action
+            if(action.equals("update"))
+            {
+                int id = getIntent().getExtras().getInt("id");
+                prepareToEdit(id); //Prepare interface to edit Memo
+            }
         }
 
         catch (Exception e)
@@ -214,36 +223,12 @@ public class AddMemoActivity extends AppCompatActivity
                             if(!expiryDate.equals(""))
                                 dateExpiryDate = new SimpleDateFormat("dd/MM/yyyy").parse(expiryDate);
 
-                            //Storing new data
-                            realm.beginTransaction();
-                            //Populate Location with value
-                            Location memoLocation = realm.createObject(Location.class);
-                            memoLocation.setCity(selectLocation.getCity());
-                            memoLocation.setAddress(selectLocation.getAddress());
-                            memoLocation.setLatitude(selectLocation.getLatitude());
-                            memoLocation.setLongitude(selectLocation.getLongitude());
-                            //Populate Memo with value
-                            // increment id --> primary key
-                            Number currentIdNum = realm.where(Memo.class).max("id");
-                            int nextId;
-                            if(currentIdNum == null)
-                                nextId = 1;
+                            //Chose the action
+                            if(action.equals("update"))
+                                updateMemo(title, description, completed, dateExpiryDate);
+
                             else
-                                nextId = currentIdNum.intValue() + 1;
-                            Memo memo = realm.createObject(Memo.class, nextId);
-                            //memo.setId(nextId);
-                            memo.setTitle(title);
-                            memo.setDescription(description);
-                            if(dateExpiryDate != null)
-                                memo.setExpiryDate(dateExpiryDate);
-                            memo.setDateOfCreation(new Date());
-                            memo.setCompleted(false);
-                            memo.setPlace(memoLocation);
-                            memo.setCompleted(completed);
-                            realm.commitTransaction();
-                            //Notify correct insertion
-                            Toast.makeText(AddMemoActivity.this, "Memo successfully saved", Toast.LENGTH_SHORT).show();
-                            finish(); //Close add memo activity
+                                addMemo(title, description, completed, dateExpiryDate);
                         }
 
                         else
@@ -257,6 +242,32 @@ public class AddMemoActivity extends AppCompatActivity
                 }
             });
         }
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("AddMemoActivity", e.getMessage().toString(), this);
+        }
+    }
+
+    /**
+     * Method to prepare the interface to edit action
+     */
+    private void prepareToEdit(int id)
+    {
+        try
+        {
+            memoToEdit = realm.where(Memo.class).equalTo("id", id).findFirst(); //Getting memo to edit
+            if(memoToEdit != null)
+            {
+                etTitle.setText(memoToEdit.getTitle());
+                etDescription.setText(memoToEdit.getDescription());
+                if(memoToEdit.getExpiryDate() != null)
+                    etDate.setText(memoToEdit.expiryDateToString());
+                cbCompleted.setChecked(memoToEdit.isCompleted());
+                mtAddMemo.setText("Update");
+                selectLocation = memoToEdit.getPlace();
+            }
+        }
+
         catch (Exception e)
         {
             ShowException.ShowExceptionMessage("AddMemoActivity", e.getMessage().toString(), this);
@@ -282,5 +293,106 @@ public class AddMemoActivity extends AppCompatActivity
         }
 
         return true;
+    }
+
+    /**
+     * Method to add Memo in db
+     * @param title
+     * @param description
+     * @param completed
+     * @param dateExpiryDate
+     */
+    private void addMemo(String title, String description, boolean completed, Date dateExpiryDate)
+    {
+        try
+        {
+            //Storing new data
+            realm.beginTransaction();
+            //Populate Location with value
+            Location memoLocation = realm.createObject(Location.class);
+            memoLocation.setCity(selectLocation.getCity());
+            memoLocation.setAddress(selectLocation.getAddress());
+            memoLocation.setLatitude(selectLocation.getLatitude());
+            memoLocation.setLongitude(selectLocation.getLongitude());
+            //Populate Memo with value
+            // increment id --> primary key
+            Number currentIdNum = realm.where(Memo.class).max("id");
+            int nextId;
+            if(currentIdNum == null)
+                nextId = 1;
+            else
+                nextId = currentIdNum.intValue() + 1;
+            Memo memo = realm.createObject(Memo.class, nextId);
+            //memo.setId(nextId);
+            memo.setTitle(title);
+            memo.setDescription(description);
+            if(dateExpiryDate != null)
+                memo.setExpiryDate(dateExpiryDate);
+            memo.setDateOfCreation(new Date());
+            memo.setCompleted(false);
+            memo.setPlace(memoLocation);
+            memo.setCompleted(completed);
+            realm.commitTransaction();
+            //Notify correct insertion
+            Toast.makeText(AddMemoActivity.this, "Memo successfully saved", Toast.LENGTH_SHORT).show();
+            finish(); //Close add memo activity
+        }
+
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("AddMemoActivity", e.getMessage().toString(), this);
+        }
+    }
+
+    /**
+     * Method to update Memo
+     * @param title
+     * @param description
+     * @param completed
+     * @param dateExpiryDate
+     */
+    private void updateMemo(String title, String description, boolean completed, Date dateExpiryDate)
+    {
+        try
+        {
+            //Update data
+            realm.beginTransaction();
+            //Populate Location with value
+            Location memoLocation = realm.createObject(Location.class);
+            memoLocation.setCity(selectLocation.getCity());
+            memoLocation.setAddress(selectLocation.getAddress());
+            memoLocation.setLatitude(selectLocation.getLatitude());
+            memoLocation.setLongitude(selectLocation.getLongitude());
+
+            if(memoToEdit == null) //If for some reason memoToEdit was null I create it
+            {
+                Number currentIdNum = realm.where(Memo.class).max("id");
+                int nextId;
+                if(currentIdNum == null)
+                    nextId = 1;
+                else
+                    nextId = currentIdNum.intValue() + 1;
+                memoToEdit = realm.createObject(Memo.class, nextId);
+            }
+            //Update Memo values
+            memoToEdit.setTitle(title);
+            memoToEdit.setDescription(description);
+            if(dateExpiryDate != null)
+                memoToEdit.setExpiryDate(dateExpiryDate);
+            memoToEdit.setDateOfCreation(new Date());
+            memoToEdit.setCompleted(false);
+            memoToEdit.setPlace(memoLocation);
+            memoToEdit.setCompleted(completed);
+            realm.copyToRealmOrUpdate(memoToEdit); //Update Memo
+            realm.commitTransaction();
+            //Notify correct insertion
+            Toast.makeText(AddMemoActivity.this, "Memo successfully updated", Toast.LENGTH_SHORT).show();
+            finish(); //Close add memo activity
+        }
+
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("AddMemoActivity", e.getMessage().toString(), this);
+        }
     }
 }
