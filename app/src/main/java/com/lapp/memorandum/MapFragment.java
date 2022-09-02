@@ -1,6 +1,7 @@
 package com.lapp.memorandum;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -20,6 +21,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingClient;
+import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,7 +33,10 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.lapp.memorandum.models.Memo;
+import com.lapp.memorandum.services.GeoFencingManaging;
 import com.lapp.memorandum.utils.MemoAppData;
 
 import java.util.ArrayList;
@@ -41,11 +49,12 @@ import io.realm.Sort;
 /**
  * Map fragment
  */
-public class MapFragment extends Fragment
-{
+public class MapFragment extends Fragment {
     /*Attributes*/
     private Context mapContext;
     private SupportMapFragment supportMapFragment;
+    private GeofencingClient geofencingClient;
+    private GeoFencingManaging geoFencingManaging;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,20 +64,19 @@ public class MapFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = null;
-
-        try
-        {
+        try {
+            //Set attributes
             view = inflater.inflate(R.layout.fragment_map, container, false);
             mapContext = getContext();
+            geofencingClient = LocationServices.getGeofencingClient(getActivity());
+            geoFencingManaging = new GeoFencingManaging(mapContext);
 
             //Check user permission
             checkUSerPermission();
 
             supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.frgMap);
             setMap();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             ShowException.ShowExceptionMessage("MapFragment", e.getMessage().toString(), getContext());
         }
 
@@ -78,10 +86,8 @@ public class MapFragment extends Fragment
     /**
      * Method to set map and relative marker
      */
-    private void setMap()
-    {
-        try
-        {
+    private void setMap() {
+        try {
             supportMapFragment.getMapAsync(new OnMapReadyCallback() { //Async map
                 @Override
                 public void onMapReady(@NonNull GoogleMap googleMap) //When map is ready
@@ -97,9 +103,8 @@ public class MapFragment extends Fragment
                             equalTo("isCompleted", false).findAll(); //Select and get the valid Memo
 
                     //Adding map Marker on position
-                    for (Memo currentMemo: memoList)
-                    {
-                        if((currentMemo.getPlace().getLatitude() != -1) && (currentMemo.getPlace().getLongitude() != -1)) //If Memo Location is set
+                    for (Memo currentMemo : memoList) {
+                        if ((currentMemo.getPlace().getLatitude() != -1) && (currentMemo.getPlace().getLongitude() != -1)) //If Memo Location is set
                         {
                             LatLng memoLocation = new LatLng(currentMemo.getPlace().getLatitude(), currentMemo.getPlace().getLongitude());
                             MarkerOptions memoMarker = new MarkerOptions();
@@ -108,25 +113,24 @@ public class MapFragment extends Fragment
                             memoMarker.snippet(currentMemo.getDescription());
                             memoMarker.icon(createMarker(mapContext, R.drawable.memo_map_icon));
                             googleMap.addMarker(memoMarker);
+
+                            addGeoFence(memoLocation, currentMemo.getId());
                         }
                     }
 
-                    if(MemoAppData.getUserLocation() != null)
-                    {
+                    if (MemoAppData.getUserLocation() != null) {
                         //Adding user position
                         LatLng latLng = new LatLng(MemoAppData.getUserLocation().getLatitude(), MemoAppData.getUserLocation().getLongitude());
                         MarkerOptions userMarker = new MarkerOptions();
                         userMarker.position(latLng);
                         userMarker.title("You're here!");
                         googleMap.addMarker(userMarker);
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10)); //Focus on position animated
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10)); //Focus on position animated //TODO: CHECK IF IT WORK
                     }
                 }
             });
         }
-
-        catch (Exception e)
-        {
+        catch (Exception e) {
             ShowException.ShowExceptionMessage("MapFragment", e.getMessage().toString(), getContext());
         }
     }
@@ -139,15 +143,66 @@ public class MapFragment extends Fragment
      */
     private BitmapDescriptor createMarker(Context context, @DrawableRes int vectorDrawableResourceId)
     {
-        Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
-        //Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        //vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20);
-        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        background.draw(canvas);
-        //vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
+        try
+        {
+            Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+            background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
+            //Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+            //vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20);
+            Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            background.draw(canvas);
+            //vectorDrawable.draw(canvas);
+            return BitmapDescriptorFactory.fromBitmap(bitmap);
+        }
+
+
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("MapFragment", e.getMessage().toString(), getContext());
+        }
+
+        return null;
+    }
+
+    /**
+     * Method to add a new GeoFence
+     * @param latLng
+     * @param id --> corresponding with Memo id
+     */
+    private void addGeoFence(LatLng latLng, int id)
+    {
+        try
+        {
+            String idGeoFence = String.valueOf(id);
+            Geofence geofence = geoFencingManaging.createGeofence(idGeoFence, latLng, Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT);
+            //Create a request
+            GeofencingRequest geofencingRequest = geoFencingManaging.createGeofencingRequest(geofence);
+            PendingIntent pendingIntent = geoFencingManaging.getPendingIntent();
+
+            if (ActivityCompat.checkSelfPermission(mapContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                geofencingClient.addGeofences(geofencingRequest, pendingIntent).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused)
+                    {
+                        //TODO: remove is just for test
+                        ShowException.ShowExceptionMessage("MapFragment", "Successfully added GeoFans", getContext());
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e)
+                    {
+                        String errorMessage = geoFencingManaging.getErrorString(e);
+                        ShowException.ShowExceptionMessage("MapFragment", errorMessage, getContext());
+                    }
+                });
+            }
+        }
+
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("MapFragment", e.getMessage().toString(), getContext());
+        }
     }
 
     /**
@@ -164,8 +219,16 @@ public class MapFragment extends Fragment
      */
     private void checkUSerPermission()
     {
-        if(!MemoAppData.getPermissionManager(getMapContext()).checkPermissions(MemoAppData.getPermissions()))
-            Toast.makeText(getMapContext(), "Please, leave the necessary permissions", Toast.LENGTH_SHORT).show();
+        try
+        {
+            if(!MemoAppData.getPermissionManager(getMapContext()).checkPermissions(MemoAppData.getPermissions()))
+                Toast.makeText(getMapContext(), "Please, leave the necessary permissions", Toast.LENGTH_SHORT).show();
+        }
+
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("MapFragment", e.getMessage().toString(), getContext());
+        }
     }
 
     /*Getters*/

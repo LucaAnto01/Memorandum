@@ -17,6 +17,7 @@ import com.lapp.memorandum.utils.MemoAppData;
  */
 public class LocationManaging implements LocationListener
 {
+    /*Attributes*/
     private LocationManager locationManager;
     private Context context;
     private final int timeToUpdate =  300000; //5 minutes
@@ -32,6 +33,9 @@ public class LocationManaging implements LocationListener
         init();
     }
 
+    /**
+     * Method to init the Location manager
+     */
     private void init()
     {
         try
