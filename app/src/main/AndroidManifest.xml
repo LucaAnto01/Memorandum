@@ -42,8 +42,8 @@
             android:name=".MainActivity"
             android:exported="false" />
 
-        <!-- Foreground service -->
-        <service android:name=".services.GeoFencingService"
+        <!-- Foreground service
+        <service android:name=".services.GeoFencingManaging"
             android:foregroundServiceType="location"
             android:enabled="true"
             android:exported="true"
@@ -51,7 +51,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.TRAKPOSITIONSERVICE" />
             </intent-filter>
-        </service>
+        </service>-->
 
     </application>
 
