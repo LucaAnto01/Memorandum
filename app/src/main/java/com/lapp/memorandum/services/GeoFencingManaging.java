@@ -28,7 +28,7 @@ public class GeoFencingManaging extends ContextWrapper
     /*Attributes*/
     private Context context;
     private PendingIntent pendingIntent; //To execute operations with permissions
-    private final float geoFenceRadius = 1500; //Meters
+    private final float geoFenceRadius = 500; //Meters
 
     /**
      * Constructor method
@@ -49,10 +49,10 @@ public class GeoFencingManaging extends ContextWrapper
     {
         try
         {
-            return new GeofencingRequest.Builder()
-                    .addGeofence(geofence)
+            return (new GeofencingRequest.Builder()
                     .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
-                    .build();
+                    .addGeofence(geofence)
+                    .build());
         }
 
         catch (Exception e)
@@ -71,13 +71,13 @@ public class GeoFencingManaging extends ContextWrapper
      * @return
      */
     public Geofence createGeofence(String ID, LatLng latLng, int transitionTypes) {
-        return new Geofence.Builder()
+        return (new Geofence.Builder()
                 .setCircularRegion(latLng.latitude, latLng.longitude, geoFenceRadius)
                 .setRequestId(ID)
                 .setTransitionTypes(transitionTypes)
                 .setLoiteringDelay(5000) //Second before receiving a notification after entering in the geofence
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .build();
+                .build());
     }
 
     /**
@@ -94,9 +94,9 @@ public class GeoFencingManaging extends ContextWrapper
             Intent intent = new Intent(this, GFBroadcastReceiver.class); //Create new Intent
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                pendingIntent = PendingIntent.getBroadcast(context, 2607, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
             else
-                pendingIntent = PendingIntent.getBroadcast(context, 2607, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
             //pendingIntent = PendingIntent.getBroadcast(context, 2607, intent, PendingIntent.FLAG_UPDATE_CURRENT);

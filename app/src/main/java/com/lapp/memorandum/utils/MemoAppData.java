@@ -11,6 +11,7 @@ public class MemoAppData
     private static final String[] permissions = {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_BACKGROUND_LOCATION,
             Manifest.permission.INTERNET};
     private static PermissionManager permissionManager = null; //Default is null
     private static Location userLocation = null;
