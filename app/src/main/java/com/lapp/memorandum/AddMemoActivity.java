@@ -4,11 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -47,6 +50,7 @@ public class AddMemoActivity extends AppCompatActivity
     private Calendar calendar;
     private Location selectLocation;
     private Realm realm;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -55,6 +59,8 @@ public class AddMemoActivity extends AppCompatActivity
         {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_add_memo);
+
+            context = this;
 
             //Setting attributes
             etTitle = findViewById(R.id.etTitle);
@@ -123,7 +129,8 @@ public class AddMemoActivity extends AppCompatActivity
     {
         try
         {
-            DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            /*Just date*/
+            /*DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int month, int day_of_month)
                 {
@@ -143,7 +150,43 @@ public class AddMemoActivity extends AppCompatActivity
                     new DatePickerDialog(AddMemoActivity.this, date,
                             calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
                 }
+            });*/
+
+            /*Date and hour*/
+            DatePickerDialog.OnDateSetListener date=new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    calendar.set(Calendar.YEAR,year);
+                    calendar.set(Calendar.MONTH,month);
+                    calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+
+                    TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minute)
+                        {
+                            calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                            calendar.set(Calendar.MINUTE,minute);
+
+                            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm");
+
+                            updateEtDateText();
+                        }
+                    };
+
+                    new TimePickerDialog(context,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
+                }
+            };
+
+            etDate.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    new DatePickerDialog(AddMemoActivity.this, date,
+                            calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+                }
             });
+
         }
 
         catch (Exception e)
@@ -157,7 +200,7 @@ public class AddMemoActivity extends AppCompatActivity
      */
     private void updateEtDateText()
     {
-        String dateFormat = "dd/MM/yyyy";
+        String dateFormat = "dd/MM/yyyy HH:mm";
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.ITALY);
 
         etDate.setText(sdf.format(calendar.getTime()));
@@ -222,7 +265,7 @@ public class AddMemoActivity extends AppCompatActivity
 
                             Date dateExpiryDate = null;
                             if(!expiryDate.equals(""))
-                                dateExpiryDate = new SimpleDateFormat("dd/MM/yyyy").parse(expiryDate);
+                                dateExpiryDate = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(expiryDate);
 
                             //Chose the action
                             if(action.equals("update"))

@@ -90,7 +90,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MemoViewHolder>
 
                 holder.twAddress.setText(composeAddress);
 
-                String expiryDateFormatted = memo.getExpiryDateFormatted();
+                String expiryDateFormatted = memo.expiryDateToString();
                 if(expiryDateFormatted.equals(""))
                     holder.twExpiryDate.setVisibility(View.INVISIBLE); //Setting invisible because there isn't
 
