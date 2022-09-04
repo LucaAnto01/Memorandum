@@ -37,7 +37,16 @@ public class GeoFencingManaging extends ContextWrapper
     public GeoFencingManaging(Context base)
     {
         super(base);
-        this.context = base;
+
+        try
+        {
+            this.context = base;
+        }
+
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("GeoFencingManaging", e.getMessage().toString(), context);
+        }
     }
 
     /**
@@ -57,7 +66,7 @@ public class GeoFencingManaging extends ContextWrapper
 
         catch (Exception e)
         {
-            ShowException.ShowExceptionMessage("LocationManaging", e.getMessage().toString(), context);
+            ShowException.ShowExceptionMessage("GeoFencingManaging", e.getMessage().toString(), context);
         }
 
         return null;
@@ -70,14 +79,25 @@ public class GeoFencingManaging extends ContextWrapper
      * @param transitionTypes --> ENTER | DWELL | EXIT
      * @return
      */
-    public Geofence createGeofence(String ID, LatLng latLng, int transitionTypes) {
-        return (new Geofence.Builder()
-                .setCircularRegion(latLng.latitude, latLng.longitude, geoFenceRadius)
-                .setRequestId(ID)
-                .setTransitionTypes(transitionTypes)
-                .setLoiteringDelay(5000) //Second before receiving a notification after entering in the geofence
-                .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .build());
+    public Geofence createGeofence(String ID, LatLng latLng, int transitionTypes)
+    {
+        try
+        {
+            return (new Geofence.Builder()
+                    .setCircularRegion(latLng.latitude, latLng.longitude, geoFenceRadius)
+                    .setRequestId(ID)
+                    .setTransitionTypes(transitionTypes)
+                    .setLoiteringDelay(5000) //Second before receiving a notification after entering in the geofence
+                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                    .build());
+        }
+
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("GeoFencingManaging", e.getMessage().toString(), context);
+        }
+
+        return null;
     }
 
     /**
@@ -142,7 +162,7 @@ public class GeoFencingManaging extends ContextWrapper
 
         catch (Exception exc)
         {
-            ShowException.ShowExceptionMessage("LocationManaging", exc.getMessage().toString(), context);
+            ShowException.ShowExceptionMessage("GeoFencingManaging", exc.getMessage().toString(), context);
         }
 
         return "";

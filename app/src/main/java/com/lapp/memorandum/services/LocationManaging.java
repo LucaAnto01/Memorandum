@@ -29,8 +29,16 @@ public class LocationManaging implements LocationListener
      */
     public LocationManaging(Context context)
     {
-        this.context = context;
-        init();
+        try
+        {
+            this.context = context;
+            init();
+        }
+
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("LocationManaging", e.getMessage().toString(), context);
+        }
     }
 
     /**

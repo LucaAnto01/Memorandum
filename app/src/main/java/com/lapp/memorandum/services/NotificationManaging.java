@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.lapp.memorandum.R;
+import com.lapp.memorandum.ShowException;
 
 import java.util.Random;
 
@@ -32,11 +33,18 @@ public class NotificationManaging extends ContextWrapper
     public NotificationManaging(Context base)
     {
         super(base);
-        this.context = base;
+        try
+        {
+            this.context = base;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) //Check version
-            createChannel();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) //Check version
+                createChannel();
+        }
 
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("NotificationManaging", e.getMessage().toString(), context);
+        }
     }
 
     /**
@@ -45,15 +53,23 @@ public class NotificationManaging extends ContextWrapper
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void createChannel()
     {
-        NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
-        notificationChannel.enableLights(true);
-        notificationChannel.enableVibration(true);
-        notificationChannel.setDescription("Memorandum notification");
-        notificationChannel.setLightColor(Color.GREEN);
-        notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+        try
+        {
+            NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.enableLights(true);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setDescription("Memorandum notification");
+            notificationChannel.setLightColor(Color.GREEN);
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
 
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.createNotificationChannel(notificationChannel);
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            manager.createNotificationChannel(notificationChannel);
+        }
+
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("NotificationManaging", e.getMessage().toString(), context);
+        }
     }
 
     /**
@@ -65,23 +81,30 @@ public class NotificationManaging extends ContextWrapper
      */
     public void createHighPriorityNotification(String title, String description, int id, Class activityName)
     {
-        //This permit to open app (in a activityName interface) when we tap the notification
-        Intent intent = new Intent(this, activityName);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        try
+        {
+            //This permit to open app (in a activityName interface) when we tap the notification
+            Intent intent = new Intent(this, activityName);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Notification notification =(new NotificationCompat.Builder(this, channelId) //Create a notification
-                //.setContentTitle(title)
-                //.setContentText(body)
-                .setSmallIcon(R.drawable.memo_map_icon)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setStyle(new NotificationCompat.BigTextStyle().setSummaryText("Memorandum").setBigContentTitle(title).bigText(description))
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true) //Delete when click on the notification
-                .build());
+            Notification notification =(new NotificationCompat.Builder(this, channelId) //Create a notification
+                    //.setContentTitle(title)
+                    //.setContentText(body)
+                    .setSmallIcon(R.drawable.memo_map_icon)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setStyle(new NotificationCompat.BigTextStyle().setSummaryText("Memorandum").setBigContentTitle(title).bigText(description))
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true) //Delete when click on the notification
+                    .build());
 
-        //Send the notification
-        //--> use id to not repeat the notification
-        NotificationManagerCompat.from(this).notify(id, notification);
+            //Send the notification
+            //--> use id to not repeat the notification
+            NotificationManagerCompat.from(this).notify(id, notification);
+        }
 
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("NotificationManaging", e.getMessage().toString(), context);
+        }
     }
 }
