@@ -422,7 +422,11 @@ public class AddMemoActivity extends AppCompatActivity
             memoToEdit.setTitle(title);
             memoToEdit.setDescription(description);
             if(dateExpiryDate != null)
+            {
                 memoToEdit.setExpiryDate(dateExpiryDate);
+                memoToEdit.setIfIsExpiry();
+            }
+
             memoToEdit.setDateOfCreation(new Date());
             memoToEdit.setCompleted(false);
             memoToEdit.setPlace(memoLocation);

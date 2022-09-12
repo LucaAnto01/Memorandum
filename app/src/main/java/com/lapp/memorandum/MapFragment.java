@@ -68,6 +68,7 @@ public class MapFragment extends Fragment {
             //Set attributes
             view = inflater.inflate(R.layout.fragment_map, container, false);
             mapContext = getContext();
+
             geofencingClient = LocationServices.getGeofencingClient(getActivity());
             geoFencingManaging = new GeoFencingManaging(mapContext);
 
@@ -76,6 +77,7 @@ public class MapFragment extends Fragment {
 
             supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.frgMap);
             setMap();
+
         } catch (Exception e) {
             ShowException.ShowExceptionMessage("MapFragment", e.getMessage().toString(), getContext());
         }
@@ -94,8 +96,13 @@ public class MapFragment extends Fragment {
                 {
                     googleMap.clear(); //Clear map from holder marker
 
-                    if (!(ActivityCompat.checkSelfPermission(mapContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) && !(ActivityCompat.checkSelfPermission(mapContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED))
+                    if (ActivityCompat.checkSelfPermission(mapContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mapContext, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
                         googleMap.setMyLocationEnabled(true);
+
+                    else
+                        //Ask for permission
+                        ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+
 
                     Realm.init(getContext());
                     Realm realm = Realm.getDefaultInstance();
@@ -114,10 +121,11 @@ public class MapFragment extends Fragment {
                             memoMarker.icon(createMarker(mapContext, R.drawable.memo_map_icon));
                             googleMap.addMarker(memoMarker);
 
-                            addGeoFence(memoLocation, currentMemo.getId());
+                            //addGeoFence(memoLocation, currentMemo.getId()); //Adding geofence
                         }
                     }
 
+                    //Set user location
                     if (MemoAppData.getUserLocation() != null) {
                         //Adding user position
                         LatLng latLng = new LatLng(MemoAppData.getUserLocation().getLatitude(), MemoAppData.getUserLocation().getLongitude());
@@ -125,7 +133,7 @@ public class MapFragment extends Fragment {
                         userMarker.position(latLng);
                         userMarker.title("You're here!");
                         googleMap.addMarker(userMarker);
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10)); //Focus on position animated //TODO: CHECK IF IT WORK
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10)); //Focus on position animated
                     }
                 }
             });
@@ -147,8 +155,6 @@ public class MapFragment extends Fragment {
         {
             Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
             background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
-            //Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-            //vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20);
             Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
             background.draw(canvas);
@@ -185,8 +191,8 @@ public class MapFragment extends Fragment {
                     @Override
                     public void onSuccess(Void unused)
                     {
-                        //TODO: remove is just for test
-                        ShowException.ShowExceptionMessage("MapFragment", "Successfully added GeoFans", getContext());
+
+                        //ShowException.ShowExceptionMessage("MapFragment", "Successfully added GeoFans", getContext());
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

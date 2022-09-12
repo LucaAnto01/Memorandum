@@ -182,7 +182,12 @@ public class Memo extends RealmObject
                             else
                                 setExpiry(false);
                         }
+                        else
+                            setExpiry(false);
                     }
+
+                    else
+                        setExpiry(false);
 
                 }
             }

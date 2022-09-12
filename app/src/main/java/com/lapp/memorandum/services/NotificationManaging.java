@@ -85,7 +85,7 @@ public class NotificationManaging extends ContextWrapper
         {
             //This permit to open app (in a activityName interface) when we tap the notification
             Intent intent = new Intent(this, activityName);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             Notification notification =(new NotificationCompat.Builder(this, channelId) //Create a notification
                     //.setContentTitle(title)
@@ -100,6 +100,71 @@ public class NotificationManaging extends ContextWrapper
             //Send the notification
             //--> use id to not repeat the notification
             NotificationManagerCompat.from(this).notify(id, notification);
+        }
+
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("NotificationManaging", e.getMessage().toString(), context);
+        }
+    }
+
+    /**
+     * Method to create new notification
+     * @param title
+     * @param description
+     * @param id
+     */
+    public void createHighPriorityNotification(String title, String description, int id)
+    {
+        try
+        {
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
+                    .setSmallIcon(R.drawable.ic_launcher_background)
+                    .setContentTitle(title)
+                    .setContentText(description)
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText(description))
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true);
+
+            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
+            managerCompat.notify(id, builder.build());
+        }
+
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("NotificationManaging", e.getMessage().toString(), context);
+        }
+    }
+
+    /**
+     * Method to create new notification
+     * @param title
+     * @param description
+     * @param activityName
+     */
+    public void createHighPriorityNotification(String title, String description, Class activityName)
+    {
+        try
+        {
+            //This permit to open app (in a activityName interface) when we tap the notification
+            Intent intent = new Intent(this, activityName);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Notification notification =(new NotificationCompat.Builder(this, channelId) //Create a notification
+                    //.setContentTitle(title)
+                    //.setContentText(body)
+                    .setSmallIcon(R.drawable.memo_map_icon)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setStyle(new NotificationCompat.BigTextStyle().setSummaryText("Memorandum").setBigContentTitle(title).bigText(description))
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true) //Delete when click on the notification
+                    .build());
+
+            //Send the notification
+            //--> use id to not repeat the notification
+            NotificationManagerCompat.from(this).notify(new Random().nextInt(), notification);
         }
 
         catch (Exception e)

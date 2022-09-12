@@ -59,8 +59,8 @@ public class GeoFencingManaging extends ContextWrapper
         try
         {
             return (new GeofencingRequest.Builder()
-                    .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
                     .addGeofence(geofence)
+                    .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
                     .build());
         }
 
@@ -74,20 +74,20 @@ public class GeoFencingManaging extends ContextWrapper
 
     /**
      * Method to create a new GeoFence
-     * @param ID --> Geofence id
+     * @param id --> Geofence id
      * @param latLng
      * @param transitionTypes --> ENTER | DWELL | EXIT
      * @return
      */
-    public Geofence createGeofence(String ID, LatLng latLng, int transitionTypes)
+    public Geofence createGeofence(String id, LatLng latLng, int transitionTypes)
     {
         try
         {
             return (new Geofence.Builder()
                     .setCircularRegion(latLng.latitude, latLng.longitude, geoFenceRadius)
-                    .setRequestId(ID)
+                    .setRequestId(id)
                     .setTransitionTypes(transitionTypes)
-                    .setLoiteringDelay(5000) //Second before receiving a notification after entering in the geofence
+                    .setLoiteringDelay(2500) //Second before receiving a notification after entering in the geofence
                     .setExpirationDuration(Geofence.NEVER_EXPIRE)
                     .build());
         }
@@ -111,7 +111,7 @@ public class GeoFencingManaging extends ContextWrapper
             if (pendingIntent != null)
                 return pendingIntent;
 
-            Intent intent = new Intent(this, GFBroadcastReceiver.class); //Create new Intent
+            Intent intent = new Intent(context, GFBroadcastReceiver.class); //Create new Intent
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
@@ -119,7 +119,7 @@ public class GeoFencingManaging extends ContextWrapper
                 pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-            //pendingIntent = PendingIntent.getBroadcast(context, 2607, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            //pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             return pendingIntent;
         }

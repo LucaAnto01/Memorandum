@@ -16,7 +16,6 @@ public class MemoAppData
             Manifest.permission.INTERNET};
     private static PermissionManager permissionManager = null;                 //Permission manager
     private static Location userLocation = null;                               //User location
-    private static NotificationManaging notificationManaging;                  //Notification manager
 
     /*Getters & Setters*/
     public static String getApiKey()
@@ -44,8 +43,4 @@ public class MemoAppData
     public static Location getUserLocation() { return userLocation; }
 
     public static void setUserLocation(Location userLocation) { MemoAppData.userLocation = userLocation; }
-
-    public static NotificationManaging getNotificationManaging() { return notificationManaging; }
-
-    public static void setNotificationManaging(NotificationManaging notificationManaging) { MemoAppData.notificationManaging = notificationManaging; }
 }
