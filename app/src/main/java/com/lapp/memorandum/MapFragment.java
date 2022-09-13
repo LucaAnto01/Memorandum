@@ -70,7 +70,7 @@ public class MapFragment extends Fragment {
             mapContext = getContext();
 
             geofencingClient = LocationServices.getGeofencingClient(getActivity());
-            geoFencingManaging = new GeoFencingManaging(mapContext);
+            geoFencingManaging = new GeoFencingManaging(getActivity());
 
             //Check user permission
             checkUSerPermission();
@@ -121,7 +121,7 @@ public class MapFragment extends Fragment {
                             memoMarker.icon(createMarker(mapContext, R.drawable.memo_map_icon));
                             googleMap.addMarker(memoMarker);
 
-                            //addGeoFence(memoLocation, currentMemo.getId()); //Adding geofence
+                            addGeoFence(memoLocation, currentMemo.getId()); //Adding geofence
                         }
                     }
 

@@ -41,7 +41,7 @@ public class GFBroadcastReceiver extends BroadcastReceiver
         try
         {
             this.context = context;
-            Toast.makeText(this.context, "Memo successfully saved", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.context, "You've something to do...", Toast.LENGTH_SHORT).show();
 
             NotificationManaging notificationManaging = new NotificationManaging(context);
             //notificationManaging.createHighPriorityNotification("Memorandum", "You've something to do...", MapFragment.class);

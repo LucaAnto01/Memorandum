@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity
 
             locationManaging = new LocationManaging(this);
 
-
             ReplaceFragment(new MemoFragment()); //Default selected item
             binding.bottomNavigationView.setSelectedItemId(R.id.memo);
 

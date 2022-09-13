@@ -84,7 +84,7 @@ public class LocationManaging implements LocationListener
             MemoAppData.getUserLocation().setLatitude(location.getLatitude());
             MemoAppData.getUserLocation().setLongitude(location.getLongitude());
 
-            checkMemo();
+            //checkMemo();
         }
 
         catch (Exception e)
