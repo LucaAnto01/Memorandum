@@ -18,7 +18,7 @@
     <li>The models necessary for the abstraction of the application are present here: Location & Memo.</li>
   </ul>
   
-  <li>servicies</li>
+  <li>services</li>
   <ul>
     <li>Services offered and required for the application are here: Geo fencing managing, Geo fencing broadcast reciver, Location managing, Notification managing.</li>
   </ul>
@@ -40,12 +40,12 @@
 
   <li>All</li>
   <ul>
-    <li>Here are all Memo: expired, completed and valid. Sorted by date.</li>
+    <li>All Memo are here: expired, completed and valid. Sorted by date.</li>
   </ul>
   
   <li>Memo</li>
   <ul>
-    <li>Here are only the valid Memo. Sorted by date.</li>
+    <li>Here there are only the valid Memo. Sorted by date.</li>
   </ul>
   
   <li>Map</li>
@@ -59,6 +59,6 @@
 
 <h3>🤳🏼Application usage</h3>
 
-<div><p>When starting the application, the necessary permissions will be requested. In order for the application to function optimally, it will be necessary to grant the use of the location in the background, to do this: settings --> applications --> Memorandum --> location: always grant.<br>
+<div><p>When application start, the necessary permissions will be requested. In order for the application to function optimally, it will be necessary to grant the use of the location in background, to do this: settings --> applications --> Memorandum --> location: always grant.<br>
 Geo-fences are loaded on application start-up.<br>
 To edit a Memo, drag it to right.</p></div>
