@@ -9,7 +9,7 @@
     android:layout_marginHorizontal="15dp"
     android:layout_marginVertical="10dp"
     android:background="@color/memoItemBackground"
-    tools:context=".MemoActivity"
+    tools:context=".activities.MemoActivity"
     android:id="@+id/crdMemo">
 
     <RelativeLayout

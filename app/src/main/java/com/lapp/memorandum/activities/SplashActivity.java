@@ -1,10 +1,12 @@
-package com.lapp.memorandum;
+package com.lapp.memorandum.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
+import com.lapp.memorandum.R;
 
 public class SplashActivity extends AppCompatActivity
 {

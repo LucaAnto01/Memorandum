@@ -1,4 +1,4 @@
-package com.lapp.memorandum;
+package com.lapp.memorandum.activities;
 
 import android.app.AlertDialog;
 import android.content.Context;

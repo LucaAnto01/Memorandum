@@ -1,4 +1,4 @@
-package com.lapp.memorandum;
+package com.lapp.memorandum.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +22,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.button.MaterialButton;
+import com.lapp.memorandum.R;
 import com.lapp.memorandum.models.Location;
 import com.lapp.memorandum.models.Memo;
 import com.lapp.memorandum.utils.MemoAppData;
