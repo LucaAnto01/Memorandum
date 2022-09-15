@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity
 
             geofencingClient = LocationServices.getGeofencingClient(this);
             geoFencingManaging = new GeoFencingManaging(this);
-            setGeofence(); //Adding geofence
+            //setGeofence(); //Adding geofence
 
         }
 

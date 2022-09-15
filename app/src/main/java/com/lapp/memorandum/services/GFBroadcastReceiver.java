@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.google.android.gms.location.GeofenceStatusCodes;
+import com.google.android.gms.location.GeofencingEvent;
 import com.lapp.memorandum.activities.ShowException;
 import com.lapp.memorandum.models.Memo;
 
@@ -33,7 +35,7 @@ public class GFBroadcastReceiver extends BroadcastReceiver
             this.context = context;
             Toast.makeText(this.context, "You've something to do...", Toast.LENGTH_SHORT).show();
 
-            /*NotificationManaging notificationManaging = new NotificationManaging(context);
+            NotificationManaging notificationManaging = new NotificationManaging(context);
             //notificationManaging.createHighPriorityNotification("Memorandum", "You've something to do...", MapFragment.class);
 
             GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
@@ -43,7 +45,7 @@ public class GFBroadcastReceiver extends BroadcastReceiver
                 //Log.e(TAG, errorMessage);
                 return;
             }
-            List<Geofence> triggeringGeofences = new ArrayList<Geofence>();
+            /*List<Geofence> triggeringGeofences = new ArrayList<Geofence>();
             triggeringGeofences = geofencingEvent.getTriggeringGeofences(); //Getting geofence witch trigger action
 
             Memo triggerMemo = null;
