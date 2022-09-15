@@ -88,7 +88,7 @@ public class GeoFencingManaging extends ContextWrapper
                     .setRequestId(id)
                     .setTransitionTypes(transitionTypes)
                     .setLoiteringDelay(2500) //Second before receiving a notification after entering in the geofence
-                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                    .setExpirationDuration(43200000) //Self destruction
                     .build());
         }
 
