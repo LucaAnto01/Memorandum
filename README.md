@@ -10,27 +10,27 @@
 
   <li>activities</li>
   <ul>
-    <li>Application activities are contained here.</li>
+    <li>Application activities are contained here</li>
   </ul>
   
   <li>models</li>
   <ul>
-    <li>The models necessary for the abstraction of the application are present here: Location & Memo.</li>
+    <li>The models necessary for the abstraction of the application are present here: Location & Memo</li>
   </ul>
   
   <li>services</li>
   <ul>
-    <li>Services offered and required for the application are here: Geo fencing managing, Geo fencing broadcast reciver, Location managing, Notification managing.</li>
+    <li>Services offered and required for the application are here: Geo fencing managing, Geo fencing broadcast reciver, Location managing, Notification managing</li>
   </ul>
   
   <li>utils</li>
   <ul>
-    <li>Utils classes can be found here: Permission manager, Recycler View Adapter, Recycler View touch adapter, Memo app data.</li>
+    <li>Utils classes can be found here: Permission manager, Recycler View Adapter, Recycler View touch adapter, Memo app data</li>
   </ul>
   
 </ul>
 
-<div><p>Everything related to style was managed in the various subfolders of <i>res</i>.</p></div>
+<div><p>Everything related to style was managed in the various subfolders of <i>res</i></p></div>
 
 ---
 
@@ -40,17 +40,17 @@
 
   <li>All</li>
   <ul>
-    <li>All Memo are here: expired, completed and valid. Sorted by date.</li>
+    <li>All Memo are here: expired, completed and valid. Sorted by date</li>
   </ul>
   
   <li>Memo</li>
   <ul>
-    <li>Here there are only the valid Memo. Sorted by date.</li>
+    <li>Here there are only the valid Memo. Sorted by date</li>
   </ul>
   
   <li>Map</li>
   <ul>
-    <li>Memo with an associated position and valid are displayed here in a map.</li>
+    <li>Memo with an associated position and valid are displayed here in a map</li>
   </ul>
   
 </ul>
