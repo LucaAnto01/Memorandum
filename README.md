@@ -61,4 +61,5 @@
 
 <div><p>When application start, the necessary permissions will be requested. In order for the application to function optimally, it will be necessary to grant the use of the location in background, to do this: settings --> applications --> Memorandum --> location: always grant.<br>
 Geo-fences are loaded on application start-up.<br>
-To edit a Memo, drag it to right.</p></div>
+To edit a Memo, drag it to right.<br>
+To delete a Memo, long press on it.</p></div>
