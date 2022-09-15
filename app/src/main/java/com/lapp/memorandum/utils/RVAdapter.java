@@ -76,11 +76,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MemoViewHolder>
             {
                 holder.twTitle.setText(memo.getTitle()); //Setting title
 
-                if(memo.isCompleted()) //Check if memo is completed change title color to show the completed status
-                    holder.twTitle.setTextColor(Color.parseColor("#03A50E"));
-
                 if(memo.getExpiry()) //Check if memo is expiry
                     holder.twTitle.setTextColor(Color.parseColor("#FFA500"));
+
+                if(memo.isCompleted()) //Check if memo is completed change title color to show the completed status
+                    holder.twTitle.setTextColor(Color.parseColor("#03A50E"));
 
                 holder.twDescription.setText(memo.getDescription()); //Setting description
 
@@ -90,7 +90,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MemoViewHolder>
 
                 holder.twAddress.setText(composeAddress);
 
-                String expiryDateFormatted = memo.getExpiryDateFormatted();
+                String expiryDateFormatted = memo.expiryDateToString();
                 if(expiryDateFormatted.equals(""))
                     holder.twExpiryDate.setVisibility(View.INVISIBLE); //Setting invisible because there isn't
 

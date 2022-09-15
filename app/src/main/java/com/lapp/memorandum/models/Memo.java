@@ -132,10 +132,13 @@ public class Memo extends RealmObject
      */
     public String expiryDateToString()
     {
-        String format = "dd/MM/yyyy";
+        String format = "dd/MM/yyyy HH:mm";
         DateFormat dateFormat = new SimpleDateFormat(format);
 
-        return dateFormat.format(getExpiryDate());
+        if(getExpiryDate() != null)
+            return dateFormat.format(getExpiryDate());
+
+        return "";
     }
 
     /**
@@ -166,8 +169,26 @@ public class Memo extends RealmObject
                     if(calendarCheckDate.get(Calendar.DAY_OF_MONTH) < calendarCurrentDate.get(Calendar.DAY_OF_MONTH)) //Checking value of day of month
                         setExpiry(true);
 
+                    else if(calendarCheckDate.get(Calendar.DAY_OF_MONTH) == calendarCurrentDate.get(Calendar.DAY_OF_MONTH))
+                    {
+                        if(calendarCheckDate.get(Calendar.HOUR_OF_DAY) < calendarCurrentDate.get(Calendar.HOUR_OF_DAY))
+                            setExpiry(true);
+
+                        else if(calendarCheckDate.get(Calendar.HOUR_OF_DAY) == calendarCurrentDate.get(Calendar.HOUR_OF_DAY))
+                        {
+                            if(calendarCheckDate.get(Calendar.MINUTE) < calendarCurrentDate.get(Calendar.MINUTE))
+                                setExpiry(true);
+
+                            else
+                                setExpiry(false);
+                        }
+                        else
+                            setExpiry(false);
+                    }
+
                     else
                         setExpiry(false);
+
                 }
             }
         }
