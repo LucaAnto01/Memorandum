@@ -186,22 +186,34 @@ public class MainActivity extends AppCompatActivity
         }*/
     }
 
+    /**
+     * Method to set and adding geofence
+     */
     private void setGeofence()
     {
-        Realm.init(this);
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<Memo> memoList = realm.where(Memo.class).equalTo("isExpiry", false).
-                equalTo("isCompleted", false).findAll(); //Select and get the valid Memo
+        try
+        {
+            Realm.init(this);
+            Realm realm = Realm.getDefaultInstance();
+            RealmResults<Memo> memoList = realm.where(Memo.class).equalTo("isExpiry", false).
+                    equalTo("isCompleted", false).findAll(); //Select and get the valid Memo
 
-        //Adding map Marker on position
-        for (Memo currentMemo : memoList) {
-            if ((currentMemo.getPlace().getLatitude() != -1) && (currentMemo.getPlace().getLongitude() != -1)) //If Memo Location is set
-            {
-                LatLng memoLocation = new LatLng(currentMemo.getPlace().getLatitude(), currentMemo.getPlace().getLongitude());
+            //Adding map Marker on position
+            for (Memo currentMemo : memoList) {
+                if ((currentMemo.getPlace().getLatitude() != -1) && (currentMemo.getPlace().getLongitude() != -1)) //If Memo Location is set
+                {
+                    LatLng memoLocation = new LatLng(currentMemo.getPlace().getLatitude(), currentMemo.getPlace().getLongitude());
 
-                addGeoFence(memoLocation, currentMemo.getId()); //Adding geofence
+                    addGeoFence(memoLocation, currentMemo.getId()); //Adding geofence
+                }
             }
         }
+
+        catch (Exception e)
+        {
+            ShowException.ShowExceptionMessage("MainActivity", e.getMessage().toString(), this);
+        }
+
     }
 
     /**
