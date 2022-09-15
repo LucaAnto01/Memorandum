@@ -57,6 +57,8 @@
 
 ---
 
+<h3>🤳🏼Application usage</h3>
+
 <div><p>When starting the application, the necessary permissions will be requested. In order for the application to function optimally, it will be necessary to grant the use of the location in the background, to do this: settings --> applications --> Memorandum --> location: always grant.<br>
 Geo-fences are loaded on application start-up.<br>
 To edit a Memo, drag it to right.</p></div>
