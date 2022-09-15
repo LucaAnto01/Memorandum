@@ -43,7 +43,7 @@ public class GFBroadcastReceiver extends BroadcastReceiver
             this.context = context;
             Toast.makeText(this.context, "You've something to do...", Toast.LENGTH_SHORT).show();
 
-            NotificationManaging notificationManaging = new NotificationManaging(context);
+            /*NotificationManaging notificationManaging = new NotificationManaging(context);
             //notificationManaging.createHighPriorityNotification("Memorandum", "You've something to do...", MapFragment.class);
 
             GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
@@ -75,9 +75,9 @@ public class GFBroadcastReceiver extends BroadcastReceiver
                     break;
                 case Geofence.GEOFENCE_TRANSITION_EXIT:
 
-                    break;*/
+                    break;
                 }
-            }
+            }*/
 
         }
 

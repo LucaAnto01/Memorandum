@@ -58,8 +58,6 @@ public class MapFragment extends Fragment {
     /*Attributes*/
     private Context mapContext;
     private SupportMapFragment supportMapFragment;
-    private GeofencingClient geofencingClient;
-    private GeoFencingManaging geoFencingManaging;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,9 +71,6 @@ public class MapFragment extends Fragment {
             //Set attributes
             view = inflater.inflate(R.layout.fragment_map, container, false);
             mapContext = getActivity().getBaseContext();
-
-            geofencingClient = LocationServices.getGeofencingClient(mapContext);
-            geoFencingManaging = new GeoFencingManaging(mapContext);
 
             //Check user permission
             checkUSerPermission();
@@ -127,7 +122,6 @@ public class MapFragment extends Fragment {
                             memoMarker.icon(createMarker(mapContext, R.drawable.memo_map_icon));
                             googleMap.addMarker(memoMarker);
 
-                            addGeoFence(memoLocation, currentMemo.getId()); //Adding geofence
                         }
                     }
 
@@ -175,46 +169,6 @@ public class MapFragment extends Fragment {
         }
 
         return null;
-    }
-
-    /**
-     * Method to add a new GeoFence
-     * @param latLng
-     * @param id --> corresponding with Memo id
-     */
-    private void addGeoFence(LatLng latLng, int id)
-    {
-        try
-        {
-            String idGeoFence = String.valueOf(id);
-            Geofence geofence = geoFencingManaging.createGeofence(idGeoFence, latLng, Geofence.GEOFENCE_TRANSITION_ENTER); /*| Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT*/
-            //Create a request
-            GeofencingRequest geofencingRequest = geoFencingManaging.createGeofencingRequest(geofence);
-            PendingIntent pendingIntent = geoFencingManaging.getPendingIntent();
-
-            if (ActivityCompat.checkSelfPermission(mapContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                geofencingClient.addGeofences(geofencingRequest, pendingIntent).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused)
-                    {
-
-                        //ShowException.ShowExceptionMessage("MapFragment", "Successfully added GeoFans", getContext());
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e)
-                    {
-                        String errorMessage = geoFencingManaging.getErrorString(e);
-                        ShowException.ShowExceptionMessage("MapFragment", errorMessage, getContext());
-                    }
-                });
-            }
-        }
-
-        catch (Exception e)
-        {
-            ShowException.ShowExceptionMessage("MapFragment", e.getMessage().toString(), getContext());
-        }
     }
 
     /**
