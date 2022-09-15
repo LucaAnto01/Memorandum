@@ -1,4 +1,4 @@
-package com.lapp.memorandum;
+package com.lapp.memorandum.activities;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.lapp.memorandum.R;
 import com.lapp.memorandum.models.Memo;
 import com.lapp.memorandum.utils.RVAdapter;
 import com.lapp.memorandum.utils.RVTouchAdapter;

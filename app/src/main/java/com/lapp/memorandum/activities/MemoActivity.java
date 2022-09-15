@@ -1,10 +1,13 @@
-package com.lapp.memorandum;
+package com.lapp.memorandum.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
+
+import com.lapp.memorandum.R;
+import com.lapp.memorandum.activities.ShowException;
 
 public class MemoActivity extends AppCompatActivity {
 

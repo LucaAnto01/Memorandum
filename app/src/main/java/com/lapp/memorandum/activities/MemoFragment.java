@@ -1,4 +1,4 @@
-package com.lapp.memorandum;
+package com.lapp.memorandum.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,21 +9,17 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.lapp.memorandum.R;
+import com.lapp.memorandum.activities.AddMemoActivity;
+import com.lapp.memorandum.activities.ShowException;
 import com.lapp.memorandum.models.Memo;
 import com.lapp.memorandum.utils.RVAdapter;
 import com.lapp.memorandum.utils.RVTouchAdapter;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;

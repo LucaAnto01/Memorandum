@@ -1,24 +1,17 @@
 package com.lapp.memorandum.services;
 
-import android.app.Activity;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Build;
-import android.os.IBinder;
-
-import androidx.annotation.Nullable;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
-import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
-import com.lapp.memorandum.ShowException;
+import com.lapp.memorandum.activities.ShowException;
 
 /**
  * Class to manage Geofencing

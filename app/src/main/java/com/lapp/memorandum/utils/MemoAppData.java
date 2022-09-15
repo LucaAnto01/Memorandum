@@ -13,7 +13,8 @@ public class MemoAppData
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-            Manifest.permission.INTERNET};
+            Manifest.permission.INTERNET,
+            Manifest.permission.ACCESS_NOTIFICATION_POLICY};
     private static PermissionManager permissionManager = null;                 //Permission manager
     private static Location userLocation = null;                               //User location
 

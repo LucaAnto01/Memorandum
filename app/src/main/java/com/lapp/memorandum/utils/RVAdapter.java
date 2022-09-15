@@ -3,7 +3,6 @@ package com.lapp.memorandum.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,15 +12,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.lapp.memorandum.AddMemoActivity;
+import com.lapp.memorandum.activities.AddMemoActivity;
 import com.lapp.memorandum.R;
-import com.lapp.memorandum.ShowException;
+import com.lapp.memorandum.activities.ShowException;
 import com.lapp.memorandum.models.Memo;
-
-import java.text.DateFormat;
 
 import io.realm.Realm;
 import io.realm.RealmResults;

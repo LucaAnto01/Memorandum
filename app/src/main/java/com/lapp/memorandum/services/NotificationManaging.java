@@ -15,7 +15,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.lapp.memorandum.R;
-import com.lapp.memorandum.ShowException;
+import com.lapp.memorandum.activities.ShowException;
 
 import java.util.Random;
 

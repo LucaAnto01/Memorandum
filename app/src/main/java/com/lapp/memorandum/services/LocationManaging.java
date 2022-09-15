@@ -6,15 +6,11 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.lapp.memorandum.MainActivity;
-import com.lapp.memorandum.R;
-import com.lapp.memorandum.ShowException;
+import com.lapp.memorandum.activities.ShowException;
 import com.lapp.memorandum.models.Memo;
 import com.lapp.memorandum.utils.MemoAppData;
 
@@ -84,7 +80,7 @@ public class LocationManaging implements LocationListener
             MemoAppData.getUserLocation().setLatitude(location.getLatitude());
             MemoAppData.getUserLocation().setLongitude(location.getLongitude());
 
-            //checkMemo();
+            checkMemo();
         }
 
         catch (Exception e)
