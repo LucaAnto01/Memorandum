@@ -51,6 +51,7 @@ public class GFBroadcastReceiver extends BroadcastReceiver
                 int errorCode = geofencingEvent.getErrorCode();
                 String errorMessage = GeofenceStatusCodes.getStatusCodeString(errorCode);
                 //Log.e(TAG, errorMessage);
+                return;
             }
             List<Geofence> triggeringGeofences = new ArrayList<Geofence>();
             triggeringGeofences = geofencingEvent.getTriggeringGeofences(); //Getting geofence witch trigger action
