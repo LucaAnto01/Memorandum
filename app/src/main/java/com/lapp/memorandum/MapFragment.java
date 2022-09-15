@@ -3,10 +3,12 @@ package com.lapp.memorandum;
 import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.DrawableRes;
@@ -16,6 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,11 +39,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.lapp.memorandum.models.Memo;
+import com.lapp.memorandum.services.GFBroadcastReceiver;
 import com.lapp.memorandum.services.GeoFencingManaging;
 import com.lapp.memorandum.utils.MemoAppData;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -67,15 +72,16 @@ public class MapFragment extends Fragment {
         try {
             //Set attributes
             view = inflater.inflate(R.layout.fragment_map, container, false);
-            mapContext = getContext();
+            mapContext = getActivity().getBaseContext();
 
-            geofencingClient = LocationServices.getGeofencingClient(getActivity());
-            geoFencingManaging = new GeoFencingManaging(getActivity());
+            geofencingClient = LocationServices.getGeofencingClient(mapContext);
+            geoFencingManaging = new GeoFencingManaging(mapContext);
 
             //Check user permission
             checkUSerPermission();
 
             supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.frgMap);
+
             setMap();
 
         } catch (Exception e) {
