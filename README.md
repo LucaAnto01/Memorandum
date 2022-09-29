@@ -62,13 +62,12 @@
 <h3>🤳🏼Application usage</h3>
 
 <div><p>When application start, the necessary permissions will be requested. In order for the application to function optimally, it will be necessary to grant the use of the location in background, to do this: settings --> applications --> Memorandum --> location: always grant.<br>
-Location autocompletion while creating a new Memo from Google-api<br>
+Location autocompletion while creating a new Memo from Google-api.<br>
 Geo-fences are loaded on application start-up.<br>
 To edit a Memo, drag it to right.<br>
 To delete a Memo, long press on it.<br>
 A notification with title and description is generated following activation of the geofence (Due to unexplained error --> through position).<br>
-Data storage system managed through Realm DB.<br>
-Reference branch --> Master.</p></div>
+Data storage system managed through Realm DB.</p></div>
 
 ---
 
