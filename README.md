@@ -1,4 +1,4 @@
-# Memorandum 📝
+# Memorandum 📗
 ---
 <h4>📱Android application designed for Memo management</h4>
 
