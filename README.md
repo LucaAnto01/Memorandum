@@ -1,6 +1,6 @@
 # Memorandum 📗
 ---
-<h4>📱Android application designed for Memo management</h4>
+<h4>📱Android application designed for memo management</h4>
 
 ---
 
